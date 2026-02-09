@@ -30,13 +30,14 @@ from his journey.
 Wes has been quite open about his current working methods, and they are
 worth looking into in some detail. He has been running two Claude Max
 subscriptions simultaneously, which allows him to keep multiple AI
-coding agents working in parallel. The reasoning is straightforward and
-practical: while one agent is occupied with a task in one project, he
-can direct the other to begin work on something else entirely. The
-result is a kind of continuous pipeline of productive output, where the
-bottleneck is no longer the speed at which code can be written but
-rather the speed at which Wes can conceive of, direct, and review the
-work being done.
+coding agents working in parallel. The reasoning is practical: while one
+agent is occupied with a task in one project, he can direct the other to
+begin work on something else entirely. It also helps with usage limits,
+since each subscription has per-period token quotas that heavy users can
+burn through quickly. The result is a kind of continuous pipeline of
+productive output, where the bottleneck is no longer the speed at which
+code can be written but rather the speed at which Wes can conceive of,
+direct, and review the work being done.
 
 This arrangement has allowed him to produce an extraordinary volume of
 high-quality software in a very short span of time. He has described
