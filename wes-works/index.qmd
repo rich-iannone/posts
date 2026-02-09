@@ -20,3 +20,8 @@ roborev solves this by reviewing every commit as it happens. It installs as a po
 
 [moneyflow](https://moneyflow.dev/) ([GitHub](https://github.com/wesm/moneyflow)) is a terminal-based personal finance tool written in Python that supports platforms like Monarch Money, YNAB, and Amazon purchase history. It is designed for people who prefer keyboard-driven workflows and need to process large numbers of transactions quickly. It uses [Polars](https://pola.rs/) for fast local data operations and provides drill-down analytics by merchant, category, or time period. All filtering, searching, and aggregation happens locally, with no API latency after the initial data download. It is the kind of tool that scratches a very particular itch, the sort of thing that a certain class of technically minded person has always wished existed, and Wes simply went ahead and built it.
 
+
+### VibePulse: Watching the Token Meter
+
+![VibePulse menu bar views showing daily cumulative spend and 30-day usage breakdown.](images/vibepulse-today.png){fig-alt="VibePulse macOS menu bar app showing a daily summary of Claude Code and Codex token consumption"}
+
