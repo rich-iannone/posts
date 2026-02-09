@@ -28,7 +28,7 @@ recent months may be the most interesting chapter of his career so far.
 ## Two Claude Max Accounts and an Astonishing Pace
 
 Wes has been quite open about his current working methods, and they are
-looing into in some detail. He has been running two Claude Max
+worth looking into in some detail. He has been running two Claude Max
 subscriptions simultaneously, which allows him to keep multiple AI
 coding agents working in parallel. The reasoning is straightforward and
 practical: while one agent is occupied with a task in one project, he
