@@ -45,9 +45,13 @@ With the session logs under control, the next natural question was: how much is 
 
 With visibility into sessions and spend, the remaining bottleneck was code quality: reviewing the ever-growing stream of agent-generated commits.
 
+### roborev, Continuous Code Review for Agents
 
+![The roborev TUI showing the review queue with commit reviews, verdicts, and status.](images/roborev.png){fig-alt="roborev terminal UI displaying the review queue screen with commit reviews and their pass/fail verdicts"}
 
+Perhaps the biggest of his recent projects is [roborev](https://roborev.io/) ([GitHub](https://github.com/roborev-dev/roborev)), a continuous background code review system written in Go. The premise is elegantly simple and addresses a real problem in the emerging world of agentic software development. AI coding agents write code quickly, but they make mistakes, and under the old workflow the review of that code would come far too late to be useful, often after the agent had already moved on to the next task and the relevant context was lost.
 
+roborev solves this by reviewing every commit as it happens. It installs as a post-commit hook, runs reviews in the background, and surfaces issues in seconds rather than hours. It comes with an interactive terminal interface, supports multiple agents including Codex, Claude Code, Gemini, Copilot, and others, and can even automatically fix the issues it finds through its `roborev fix` and `roborev refine` commands. The project has already reached version `0.26.0` with 55 releases, and it has attracted an engaged community of contributors. Wes himself has said that roborev has "totally transformed" his productivity, and one can easily see why: it closes the feedback loop on agent-generated code to something approaching real time.
 
 ## Practical Observations on the Agentic Workflow
 
