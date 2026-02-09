@@ -11,7 +11,13 @@ Wes McKinney is best known as the creator of [pandas](https://pandas.pydata.org/
 
 I've been watching it happen in real time. I work in open source at Posit, creating and maintaining R and Python packages. Wes and I aren't in the same group (he's working on Positron, the Data Science IDE by Posit) but I've been watching with amazement as his output has accelerated over the past few months. Given the rapid improvements in AI coding agents, these tools that are changing how even the most accomplished programmers approach building software. Wes's response has been to embrace these workflows fully, and the results are pretty incredible.
 
-This post is my attempt to share what I've observed, and what I think readers, especially those curious about AI coding workflows, can learn from his journey.
+This post is my attempt to share what I've observed, and what I think readers, especially those curious about AI coding workflows, can learn from his journey. By looking at Wes's:
+
+- embrace of AI coding agents
+- five projects he shipped in rapid succession
+- usage of previously unfamiliar-to-him languages
+
+I'll share three big lessons I've taken away for my own work.
 
 ## Two Claude Max Accounts and an Astonishing Pace
 
