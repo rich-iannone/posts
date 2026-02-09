@@ -63,7 +63,9 @@ With the full productivity stack in place (session viewer, token monitor, code r
 
 ## What Stands Out
 
+A few things about Wes's approach are worth highlighting. First, he's fearless about working in unfamiliar languages. His career was built on Python, but most of these projects are in Go, Swift, and Rust. He chose Go for roborev and msgvault not because he knew it, but because it produces distributable static binaries, builds fast, and performs well. AI agents bridged the gap between his intent and the implementation.
 
+Second, he's optimized everything around the agentic workflow (fast compile-and-test cycles, self-contained binaries, and automated code review on every commit). Minimizing friction in that loop matters a lot when agents are compiling and testing far more frequently than any person would.
 
 
 ## My Takeaways
