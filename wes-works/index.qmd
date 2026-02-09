@@ -31,6 +31,8 @@ roborev solves this by reviewing every commit as it happens. It installs as a po
 
 ![The msgvault interactive TUI showing aggregated email senders with message counts and sizes.](images/msgvault-tui.svg){fig-alt="msgvault terminal UI displaying a list of email senders aggregated by message count and total size"}
 
+[msgvault](https://msgvault.io/) ([GitHub](https://github.com/wesm/msgvault)) is a tool for archiving and searching a lifetime of email and chat messages, written in Go and powered by [DuckDB](https://duckdb.org/) for fast analytics over [Parquet](https://parquet.apache.org/) files. It performs a full Gmail backup including raw MIME data, attachments, labels, and metadata, and then provides a rich interactive terminal interface for exploring the archive. It features full-text search with Gmail-like query syntax, incremental sync via the Gmail History API, multi-account support, and content-addressed attachment deduplication. Perhaps most notably, it includes an MCP server so that AI assistants can search and analyze your full message history conversationally. The project has already gathered nearly a thousand stars on GitHub and has a growing community on Discord.
+
 ### moneyflow: Personal Finance in the Terminal
 
 ![The moneyflow TUI showing a keyboard-driven interface for exploring personal finance transactions.](images/moneyflow-tui.svg){fig-alt="moneyflow terminal UI displaying personal finance transactions with merchant names, categories, and amounts"}
