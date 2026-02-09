@@ -81,3 +81,5 @@ The projects themselves are useful, practical, and solve real problems that many
 
 If there is a single lesson to take away from Wes McKinney's recent work, it is that we are entering a period in which individual engineers with the right combination of experience, taste, and ambition can accomplish things that would previously have required entire teams. The leverage provided by AI coding agents is real and substantial, particularly for people who have a clear vision of what they want to build and the engineering judgment to guide the process effectively.
 
+We should all feel encouraged by this example! Not everyone will build five open source projects in a few months, nor should they feel obligated to. But if you have an idea for a tool that would make your life or the lives of others better, the barriers to building it have never been lower. Just go for it, I say! And if the right language for the job is one you have never used, that shouldn't stop you. If the project is ambitious, it is now possible to make meaningful progress on it in during off hours rather than waiting for the luxury of uninterrupted months of dedicated effort.
+
