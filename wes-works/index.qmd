@@ -56,9 +56,7 @@ roborev solves this by reviewing every commit as it happens. It installs as a po
 With the full productivity stack in place (session viewer, token monitor, code reviewer), Wes had essentially fired up the full machine. His final project marks a full embrace of the agentic coding in Go lifestyle. (For more, see his post on [agent ergonomics](https://wesmckinney.com/blog/agent-ergonomics/).)
 
 
-He also emphasizes the importance of painless software distribution. When you are creating numerous small tools to support your working process, the ability to produce self-contained, dependency-free binaries that can be easily deployed becomes essential. This is another area where Go and Rust have significant advantages over Python, which still requires dragging along an interpreter and managing virtual environments, a process that can feel, as Wes puts it, rather like the Java Virtual Machine from which we all once tried so desperately to free ourselves.
 
-The creation of roborev itself is an interesting commentary on the agentic workflow. One of the big challenges of working with AI coding agents is that the code they produce, while often impressive, is also often imperfect in ways that are easy to miss during a quick manual review. This is especially true when the code is in a language the human reviewer is not deeply experienced with. By building a tool that automates the review of every commit and can even fix the problems it finds, Wes has effectively created a quality assurance layer that makes the entire process more reliable and sustainable.
 
 ## An Inspiration for the Rest of Us
 
