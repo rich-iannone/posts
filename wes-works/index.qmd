@@ -45,6 +45,7 @@ As anyone who works extensively with AI coding agents knows, the sessions pile u
 
 ![The agent-session-viewer web interface for browsing and searching AI coding sessions.](images/agent-session-viewer.png){fig-alt="agent-session-viewer showing a web UI with a list of AI coding sessions and a conversation view"}
 
+[`agent-session-viewer`](https://github.com/wesm/agent-session-viewer) addresses this directly, providing a web-based interface for browsing, searching, and revisiting sessions from Claude Code and Codex. It features full-text search across all sessions, live updates as active sessions progress, automatic background syncing, and the ability to export sessions as self-contained HTML documents or publish them as GitHub Gists for sharing with colleagues. It is written primarily in Python with a [Tauri](https://tauri.app/)-based native app component in Rust.
 
 ### VibePulse: Watching the Token Meter
 
