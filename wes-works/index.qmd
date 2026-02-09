@@ -75,3 +75,9 @@ Fast compile-and-test cycles matter enormously in agentic development. Agents co
 
 Automate quality assurance wherever possible. Wes's roborev reviews every commit and can even fix problems automatically, making the process more reliable and sustainable. These are practical lessons for anyone working with AI coding agents.
 
+## Build for Joy and Utility
+
+Wes's recent burst of open source work was done largely on nights and weekends, driven by enthusiasm and the sheer pleasure of building useful things. Even as a Principal Architect at Posit, he continues to push forward with energy and curiosity.
+
+Let yourself be inspired by this example. AI coding tools can unlock new phases of productivity and creativity for experienced engineers. The projects Wes built are practical, solve real problems, and were produced by a single person working alongside AI agents over just a few months.
+
