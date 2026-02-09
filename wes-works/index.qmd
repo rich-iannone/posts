@@ -53,3 +53,7 @@ As anyone who works extensively with AI coding agents knows, the sessions pile u
 
 [VibePulse](https://github.com/wesm/vibepulse) is a macOS menu bar application, written in Swift, that monitors Claude Code and Codex token consumption. It provides a daily cumulative spend view and a 30-day view with per-tool breakdowns, helping heavy users of AI coding agents keep an eye on how much computational resources they are actually consuming. It is a small but practical utility, the sort of thing one builds when one is using these tools so intensively that tracking the usage itself becomes a necessity.
 
+## Fearlessness with Unfamiliar Languages
+
+One of the most striking aspects of this burst of productivity is the range of programming languages involved. Wes is, by his own account, primarily a Python developer. His career was built on Python, his most famous projects are in Python, and the books he writes are centered around Python. And yet the majority of his recent projects are written in Go, a language he says he has never manually written a line of in his life. VibePulse is written in Swift. `agent-session-viewer` includes components in Rust.
+
