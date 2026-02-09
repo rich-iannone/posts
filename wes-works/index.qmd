@@ -55,10 +55,12 @@ roborev solves this by reviewing every commit as it happens. It installs as a po
 
 With the full productivity stack in place (session viewer, token monitor, code reviewer), Wes had essentially fired up the full machine. His final project marks a full embrace of the agentic coding in Go lifestyle. (For more, see his post on [agent ergonomics](https://wesmckinney.com/blog/agent-ergonomics/).)
 
+### msgvault: Archive a Lifetime of Email
 
+![The msgvault interactive TUI showing aggregated email senders with message counts and sizes.](images/msgvault-tui.svg){fig-alt="msgvault terminal UI displaying a list of email senders aggregated by message count and total size"}
 
+[msgvault](https://msgvault.io/) ([GitHub](https://github.com/wesm/msgvault)) is a tool for archiving and searching a lifetime of email and chat messages, written in Go and powered by [DuckDB](https://duckdb.org/) for fast analytics over [Parquet](https://parquet.apache.org/) files. It performs a full Gmail backup including raw MIME data, attachments, labels, and metadata, and then provides a rich interactive terminal interface for exploring the archive. It features full-text search with Gmail-like query syntax, incremental sync via the Gmail History API, multi-account support, and content-addressed attachment deduplication. Perhaps most notably, it includes an MCP server so that AI assistants can search and analyze your full message history conversationally. The project has already gathered nearly a thousand stars on GitHub and has a growing community on Discord.
 
-## An Inspiration for the Rest of Us
 
 What makes all of this particularly noteworthy is not just the technical accomplishment but the spirit in which it has been undertaken. Wes McKinney is a Principal Architect at [Posit](https://posit.co/), and this recent burst of open source work has been done largely on nights and weekends, driven by enthusiasm and the sheer pleasure of building useful things. He is, by any reasonable measure, already one of the most accomplished figures in the data science community, and yet he continues to push forward with the kind of energy and curiosity that one more usually associates with someone just beginning their career.
 
