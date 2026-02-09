@@ -25,3 +25,5 @@ roborev solves this by reviewing every commit as it happens. It installs as a po
 
 ![VibePulse menu bar views showing daily cumulative spend and 30-day usage breakdown.](images/vibepulse-today.png){fig-alt="VibePulse macOS menu bar app showing a daily summary of Claude Code and Codex token consumption"}
 
+[VibePulse](https://github.com/wesm/vibepulse) is a macOS menu bar application, written in Swift, that monitors Claude Code and Codex token consumption. It provides a daily cumulative spend view and a 30-day view with per-tool breakdowns, helping heavy users of AI coding agents keep an eye on how much computational resources they are actually consuming. It is a small but practical utility, the sort of thing one builds when one is using these tools so intensively that tracking the usage itself becomes a necessity.
+
