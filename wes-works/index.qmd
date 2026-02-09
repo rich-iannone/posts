@@ -1,5 +1,5 @@
 ---
-title: "The Remarkable Productivity of Wes McKinney in the Age of Agentic Engineering"
+title: "The Prolific Output of Wes McKinney in the Age of Agentic Engineering"
 author: "Rich Iannone"
 date: "2026-02-16"
 description: >
