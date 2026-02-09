@@ -14,3 +14,9 @@ Perhaps the biggest of his recent projects is [roborev](https://roborev.io/) ([G
 
 roborev solves this by reviewing every commit as it happens. It installs as a post-commit hook, runs reviews in the background, and surfaces issues in seconds rather than hours. It comes with an interactive terminal interface, supports multiple agents including Codex, Claude Code, Gemini, Copilot, and others, and can even automatically fix the issues it finds through its `roborev fix` and `roborev refine` commands. The project has already reached version 0.26.0 with 55 releases, and it has attracted a modest but engaged community of contributors. Wes himself has said that roborev has "totally transformed" his productivity, and one can easily see why: it closes the feedback loop on agent-generated code to something approaching real time.
 
+### moneyflow: Personal Finance in the Terminal
+
+![The moneyflow TUI showing a keyboard-driven interface for exploring personal finance transactions.](images/moneyflow-tui.svg){fig-alt="moneyflow terminal UI displaying personal finance transactions with merchant names, categories, and amounts"}
+
+[moneyflow](https://moneyflow.dev/) ([GitHub](https://github.com/wesm/moneyflow)) is a terminal-based personal finance tool written in Python that supports platforms like Monarch Money, YNAB, and Amazon purchase history. It is designed for people who prefer keyboard-driven workflows and need to process large numbers of transactions quickly. It uses [Polars](https://pola.rs/) for fast local data operations and provides drill-down analytics by merchant, category, or time period. All filtering, searching, and aggregation happens locally, with no API latency after the initial data download. It is the kind of tool that scratches a very particular itch, the sort of thing that a certain class of technically minded person has always wished existed, and Wes simply went ahead and built it.
+
