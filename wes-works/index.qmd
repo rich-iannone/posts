@@ -19,21 +19,7 @@ Wes has been quite open about his current working methods, and they are worth lo
 
 This arrangement has allowed him to produce an extraordinary volume of high-quality software in a very short span of time. He has described himself as working harder and having more fun building than he has had in years, and the evidence for that claim is clearly visible in his public repositories. The pace of commits, releases, and new project announcements has been something to behold. Let's take a closer look at what he has actually shipped...
 
-### roborev: Continuous Code Review for Agents
-
-![The roborev TUI showing the review queue with commit reviews, verdicts, and status.](images/roborev.png){fig-alt="roborev terminal UI displaying the review queue screen with commit reviews and their pass/fail verdicts"}
-
-Perhaps the biggest of his recent projects is [roborev](https://roborev.io/) ([GitHub](https://github.com/roborev-dev/roborev)), a continuous background code review system written in Go. The premise is elegantly simple and addresses a real problem in the emerging world of agentic software development. AI coding agents write code quickly, but they make mistakes, and under the old workflow the review of that code would come far too late to be useful, often after the agent had already moved on to the next task and the relevant context was lost.
-
-roborev solves this by reviewing every commit as it happens. It installs as a post-commit hook, runs reviews in the background, and surfaces issues in seconds rather than hours. It comes with an interactive terminal interface, supports multiple agents including Codex, Claude Code, Gemini, Copilot, and others, and can even automatically fix the issues it finds through its `roborev fix` and `roborev refine` commands. The project has already reached version 0.26.0 with 55 releases, and it has attracted a modest but engaged community of contributors. Wes himself has said that roborev has "totally transformed" his productivity, and one can easily see why: it closes the feedback loop on agent-generated code to something approaching real time.
-
-### msgvault: Archive a Lifetime of Email
-
-![The msgvault interactive TUI showing aggregated email senders with message counts and sizes.](images/msgvault-tui.svg){fig-alt="msgvault terminal UI displaying a list of email senders aggregated by message count and total size"}
-
-[msgvault](https://msgvault.io/) ([GitHub](https://github.com/wesm/msgvault)) is a tool for archiving and searching a lifetime of email and chat messages, written in Go and powered by [DuckDB](https://duckdb.org/) for fast analytics over [Parquet](https://parquet.apache.org/) files. It performs a full Gmail backup including raw MIME data, attachments, labels, and metadata, and then provides a rich interactive terminal interface for exploring the archive. It features full-text search with Gmail-like query syntax, incremental sync via the Gmail History API, multi-account support, and content-addressed attachment deduplication. Perhaps most notably, it includes an MCP server so that AI assistants can search and analyze your full message history conversationally. The project has already gathered nearly a thousand stars on GitHub and has a growing community on Discord.
-
-### moneyflow: Personal Finance in the Terminal
+### First Steps: moneyflow for Personal Finance in the Terminal
 
 ![The moneyflow TUI showing a keyboard-driven interface for exploring personal finance transactions.](images/moneyflow-tui.svg){fig-alt="moneyflow terminal UI displaying personal finance transactions with merchant names, categories, and amounts"}
 
