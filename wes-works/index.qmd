@@ -91,3 +91,4 @@ Watching Wes's journey over these past few months has genuinely changed how I th
 
 **Share Your Methods** Wes's openness in sharing his methods and insights is a model for the community. Experience, paired with powerful new tools, can unlock remarkable productivity and creativity.
 
+As someone who maintains open source packages for a living, I've already started applying these lessons! I'm leaning on agents more, I worry a bit less about whether I know a language before reaching for it, and I've been building small tools I'd previously only daydreamed about. If Wes's example is any indication, the best reason to start is that it's just a lot of fun.
