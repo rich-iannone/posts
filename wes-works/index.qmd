@@ -41,6 +41,8 @@ roborev solves this by reviewing every commit as it happens. It installs as a po
 
 ### `agent-session-viewer`: Making Sense of the Conversation Trail
 
+As anyone who works extensively with AI coding agents knows, the sessions pile up with remarkable speed, and finding that one conversation where a particular problem was solved or a specific approach was discussed can become an exercise in frustration.
+
 
 ### VibePulse: Watching the Token Meter
 
