@@ -53,7 +53,7 @@ Perhaps the biggest of his recent projects is [roborev](https://roborev.io/) ([G
 
 roborev solves this by reviewing every commit as it happens. It installs as a post-commit hook, runs reviews in the background, and surfaces issues in seconds rather than hours. It comes with an interactive terminal interface, supports multiple agents including Codex, Claude Code, Gemini, Copilot, and others, and can even automatically fix the issues it finds through its `roborev fix` and `roborev refine` commands. The project has already reached version `0.26.0` with 55 releases, and it has attracted an engaged community of contributors. Wes himself has said that roborev has "totally transformed" his productivity, and one can easily see why: it closes the feedback loop on agent-generated code to something approaching real time.
 
-## Practical Observations on the Agentic Workflow
+With the full productivity stack in place (session viewer, token monitor, code reviewer), Wes had essentially fired up the full machine. His final project marks a full embrace of the agentic coding in Go lifestyle. (For more, see his post on [agent ergonomics](https://wesmckinney.com/blog/agent-ergonomics/).)
 
 
 He also emphasizes the importance of painless software distribution. When you are creating numerous small tools to support your working process, the ability to produce self-contained, dependency-free binaries that can be easily deployed becomes essential. This is another area where Go and Rust have significant advantages over Python, which still requires dragging along an interpreter and managing virtual environments, a process that can feel, as Wes puts it, rather like the Java Virtual Machine from which we all once tried so desperately to free ourselves.
