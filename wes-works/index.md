@@ -167,52 +167,23 @@ analyze your full message history conversationally. The project has
 already gathered nearly a thousand stars on GitHub and has a growing
 community on Discord.
 
-## Embrace Unfamiliar Languages
+## What Stands Out
 
-One of the most striking aspects of Wes’s recent productivity is his
-willingness to use languages he’d never manually written before. While
-his career was built on Python, most of these new projects are in Go,
-Swift, and Rust.
+A few things about Wes’s approach are worth highlighting. First, he’s
+fearless about working in unfamiliar languages. His career was built on
+Python, but most of these projects are in Go, Swift, and Rust. He chose
+Go for roborev and msgvault not because he knew it, but because it
+produces distributable static binaries, builds fast, and performs well.
+AI agents bridged the gap between his intent and the implementation.
 
-In the era of AI coding agents, the barrier to working in an unfamiliar
-language has dropped dramatically. The question is no longer “Do I know
-this language well enough?” but “Is this the right language for the
-problem?” Wes chose Go for roborev and msgvault because it produces
-distributable static binaries, has fast and deterministic builds, and
-offers great runtime performance. The fact that he had no prior Go
-experience was not a meaningful obstacle when an AI agent could
-generate, test, and iterate on the code.
+Second, he’s optimized everything around the agentic workflow (fast
+compile-and-test cycles, self-contained binaries, and automated code
+review on every commit). Minimizing friction in that loop matters a lot
+when agents are compiling and testing far more frequently than any
+person would.
 
-Choose the best tool for the job, regardless of your personal
-familiarity. AI agents can bridge the gap between intention and
-implementation across language boundaries. Don’t be afraid to reach for
-a language that’s technically superior for a given task simply because
-you haven’t used it before.
-
-## Optimize for Agentic Workflow
-
-Fast compile-and-test cycles matter enormously in agentic development.
-Agents compile and test far more frequently than human developers, so
-any friction in that cycle becomes a serious drag on productivity. Go’s
-ultrafast compile times and painless software distribution make it ideal
-for this context. When creating numerous small tools, the ability to
-produce self-contained, dependency-free binaries is essential.
-
-Automate quality assurance wherever possible. Wes’s roborev reviews
-every commit and can even fix problems automatically, making the process
-more reliable and sustainable. These are practical lessons for anyone
-working with AI coding agents.
-
-## Build for Joy and Utility
-
-Wes’s recent burst of open source work was done largely on nights and
-weekends, driven by enthusiasm and the sheer pleasure of building useful
-things. Even as a Principal Architect at Posit, he continues to push
-forward with energy and curiosity.
-
-Let yourself be inspired by this example. AI coding tools can unlock new
-phases of productivity and creativity for experienced engineers. The
-projects Wes built are practical, solve real problems, and were produced
+And third, this was all done on nights and weekends and was driven by
+enthusiasm. These are practical tools that solve real problems, produced
 by a single person working alongside AI agents over just a few months.
 
 ## My Takeaways
