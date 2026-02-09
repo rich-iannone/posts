@@ -35,13 +35,16 @@ As anyone who works extensively with AI coding agents knows, the sessions pile u
 
 [`agent-session-viewer`](https://github.com/wesm/agent-session-viewer) addresses this directly, providing a web-based interface for browsing, searching, and revisiting sessions from Claude Code and Codex. It features full-text search across all sessions, live updates as active sessions progress, automatic background syncing, and the ability to export sessions as self-contained HTML documents or publish them as GitHub Gists for sharing with colleagues. It is written primarily in Python with a [Tauri](https://tauri.app/)-based native app component in Rust.
 
-### VibePulse: Watching the Token Meter
+With the session logs under control, the next natural question was: how much is all of this costing?
+
+### VibePulse (Watching the Token Meter)
 
 ![VibePulse menu bar views showing daily cumulative spend and 30-day usage breakdown.](images/vibepulse-today.png){fig-alt="VibePulse macOS menu bar app showing a daily summary of Claude Code and Codex token consumption"}
 
 [VibePulse](https://github.com/wesm/vibepulse) is a macOS menu bar application, written in Swift, that monitors Claude Code and Codex token consumption. It provides a daily cumulative spend view and a 30-day view with per-tool breakdowns, helping heavy users of AI coding agents keep an eye on how much computational resources they are actually consuming. It is a small but practical utility, the sort of thing one builds when one is using these tools so intensively that tracking the usage itself becomes a necessity.
 
-## Fearlessness with Unfamiliar Languages
+With visibility into sessions and spend, the remaining bottleneck was code quality: reviewing the ever-growing stream of agent-generated commits.
+
 
 One of the most striking aspects of this burst of productivity is the range of programming languages involved. Wes is, by his own account, primarily a Python developer. His career was built on Python, his most famous projects are in Python, and the books he writes are centered around Python. And yet the majority of his recent projects are written in Go, a language he says he has never manually written a line of in his life. VibePulse is written in Swift. `agent-session-viewer` includes components in Rust.
 
