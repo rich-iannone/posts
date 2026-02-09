@@ -1,0 +1,278 @@
+# The Prolific Output of Wes McKinney in the Age of Agentic Engineering
+Rich Iannone
+2026-02-16
+
+There are few individuals in the world of data science and analytical
+computing whose contributions have been as broadly felt as those of [Wes
+McKinney](https://wesmckinney.com/). For those who may not know the
+name, Wes is the creator of [pandas](https://pandas.pydata.org/), the
+Python library that has become almost synonymous with data analysis in
+that language. He began building pandas in 2008 and, in the years since,
+it has grown into one of the most widely used open source projects in
+the entire scientific computing ecosystem. He is also a co-creator of
+[Apache Arrow](https://arrow.apache.org/), the columnar in-memory data
+format that has quietly revolutionized how data moves between systems
+and languages without the costly overhead of serialization. He created
+[Ibis](https://ibis-project.org/), the portable Python dataframe API. He
+is a member of the [Apache Software
+Foundation](https://www.apache.org/), a PMC member for [Apache
+Parquet](https://parquet.apache.org/), and the author of *[Python for
+Data Analysis](https://wesmckinney.com/book)*, a book that introduced an
+entire generation of analysts and engineers to working with data in
+Python.
+
+In short, Wes McKinney has already accomplished enough for several
+lifetimes of distinguished work. And yet what he has been doing in
+recent months may be the most interesting chapter of his career so far.
+
+## Two Claude Max Accounts and an Astonishing Pace
+
+Wes has been quite open about his current working methods, and they are
+looing into in some detail. He has been running two Claude Max
+subscriptions simultaneously, which allows him to keep multiple AI
+coding agents working in parallel. The reasoning is straightforward and
+practical: while one agent is occupied with a task in one project, he
+can direct the other to begin work on something else entirely. The
+result is a kind of continuous pipeline of productive output, where the
+bottleneck is no longer the speed at which code can be written but
+rather the speed at which Wes can conceive of, direct, and review the
+work being done.
+
+This arrangement has allowed him to produce an extraordinary volume of
+high-quality software in a very short span of time. He has described
+himself as working harder and having more fun building than he has had
+in years, and the evidence for that claim is clearly visible in his
+public repositories. The pace of commits, releases, and new project
+announcements has been something to behold. Let us look at what he has
+actually shipped.
+
+### roborev: Continuous Code Review for Agents
+
+<img src="images/roborev.png"
+data-fig-alt="roborev terminal UI displaying the review queue screen with commit reviews and their pass/fail verdicts"
+alt="The roborev TUI showing the review queue with commit reviews, verdicts, and status." />
+
+Perhaps the biggest of his recent projects is
+[roborev](https://roborev.io/)
+([GitHub](https://github.com/roborev-dev/roborev)), a continuous
+background code review system written in Go. The premise is elegantly
+simple and addresses a real problem in the emerging world of agentic
+software development. AI coding agents write code quickly, but they make
+mistakes, and under the old workflow the review of that code would come
+far too late to be useful, often after the agent had already moved on to
+the next task and the relevant context was lost.
+
+roborev solves this by reviewing every commit as it happens. It installs
+as a post-commit hook, runs reviews in the background, and surfaces
+issues in seconds rather than hours. It comes with an interactive
+terminal interface, supports multiple agents including Codex, Claude
+Code, Gemini, Copilot, and others, and can even automatically fix the
+issues it finds through its `roborev fix` and `roborev refine` commands.
+The project has already reached version 0.26.0 with 55 releases, and it
+has attracted a modest but engaged community of contributors. Wes
+himself has said that roborev has “totally transformed” his
+productivity, and one can easily see why: it closes the feedback loop on
+agent-generated code to something approaching real time.
+
+### msgvault: Archive a Lifetime of Email
+
+<img src="images/msgvault-tui.svg"
+data-fig-alt="msgvault terminal UI displaying a list of email senders aggregated by message count and total size"
+alt="The msgvault interactive TUI showing aggregated email senders with message counts and sizes." />
+
+[msgvault](https://msgvault.io/)
+([GitHub](https://github.com/wesm/msgvault)) is a tool for archiving and
+searching a lifetime of email and chat messages, written in Go and
+powered by [DuckDB](https://duckdb.org/) for fast analytics over
+[Parquet](https://parquet.apache.org/) files. It performs a full Gmail
+backup including raw MIME data, attachments, labels, and metadata, and
+then provides a rich interactive terminal interface for exploring the
+archive. It features full-text search with Gmail-like query syntax,
+incremental sync via the Gmail History API, multi-account support, and
+content-addressed attachment deduplication. Perhaps most notably, it
+includes an MCP server so that AI assistants can search and analyze your
+full message history conversationally. The project has already gathered
+nearly a thousand stars on GitHub and has a growing community on
+Discord.
+
+### moneyflow: Personal Finance in the Terminal
+
+<img src="images/moneyflow-tui.svg"
+data-fig-alt="moneyflow terminal UI displaying personal finance transactions with merchant names, categories, and amounts"
+alt="The moneyflow TUI showing a keyboard-driven interface for exploring personal finance transactions." />
+
+[moneyflow](https://moneyflow.dev/)
+([GitHub](https://github.com/wesm/moneyflow)) is a terminal-based
+personal finance tool written in Python that supports platforms like
+Monarch Money, YNAB, and Amazon purchase history. It is designed for
+people who prefer keyboard-driven workflows and need to process large
+numbers of transactions quickly. It uses [Polars](https://pola.rs/) for
+fast local data operations and provides drill-down analytics by
+merchant, category, or time period. All filtering, searching, and
+aggregation happens locally, with no API latency after the initial data
+download. It is the kind of tool that scratches a very particular itch,
+the sort of thing that a certain class of technically minded person has
+always wished existed, and Wes simply went ahead and built it.
+
+### `agent-session-viewer`: Making Sense of the Conversation Trail
+
+As anyone who works extensively with AI coding agents knows, the
+sessions pile up with remarkable speed, and finding that one
+conversation where a particular problem was solved or a specific
+approach was discussed can become an exercise in frustration.
+
+<img src="images/agent-session-viewer.png"
+data-fig-alt="agent-session-viewer showing a web UI with a list of AI coding sessions and a conversation view"
+alt="The agent-session-viewer web interface for browsing and searching AI coding sessions." />
+
+[`agent-session-viewer`](https://github.com/wesm/agent-session-viewer)
+addresses this directly, providing a web-based interface for browsing,
+searching, and revisiting sessions from Claude Code and Codex. It
+features full-text search across all sessions, live updates as active
+sessions progress, automatic background syncing, and the ability to
+export sessions as self-contained HTML documents or publish them as
+GitHub Gists for sharing with colleagues. It is written primarily in
+Python with a [Tauri](https://tauri.app/)-based native app component in
+Rust.
+
+### VibePulse: Watching the Token Meter
+
+<img src="images/vibepulse-today.png"
+data-fig-alt="VibePulse macOS menu bar app showing a daily summary of Claude Code and Codex token consumption"
+alt="VibePulse menu bar views showing daily cumulative spend and 30-day usage breakdown." />
+
+[VibePulse](https://github.com/wesm/vibepulse) is a macOS menu bar
+application, written in Swift, that monitors Claude Code and Codex token
+consumption. It provides a daily cumulative spend view and a 30-day view
+with per-tool breakdowns, helping heavy users of AI coding agents keep
+an eye on how much computational resources they are actually consuming.
+It is a small but practical utility, the sort of thing one builds when
+one is using these tools so intensively that tracking the usage itself
+becomes a necessity.
+
+## Fearlessness with Unfamiliar Languages
+
+One of the most striking aspects of this burst of productivity is the
+range of programming languages involved. Wes is, by his own account,
+primarily a Python developer. His career was built on Python, his most
+famous projects are in Python, and the books he writes are centered
+around Python. And yet the majority of his recent projects are written
+in Go, a language he says he has never manually written a line of in his
+life. VibePulse is written in Swift. `agent-session-viewer` includes
+components in Rust.
+
+This is a point worth dwelling on, because it carries a lesson for all
+of us. In the era of AI coding agents, the barrier to working in an
+unfamiliar language has dropped quite a bit. The question is no longer
+“Do I know this language well enough to be productive in it?” but
+instead more like “Is this the right language for the problem at hand?”.
+Wes chose Go for roborev and msgvault not because he was good at writing
+Go code but because Go produces painlessly distributable static binaries
+with zero runtime dependencies, has fast and deterministic builds, and
+offers great runtime performance. These the qualities one wants in
+developer tooling, and the fact that Wes had no prior Go experience was
+not a meaningful obstacle when an AI agent could generate, test, and
+iterate on the code.
+
+This willingness to choose the best tool for the job regardless of
+personal familiarity is something we would all do well to adopt. It
+represents a shift in how we ought to think about language selection.
+The traditional calculus, which weighed heavily the developer’s existing
+expertise and the team’s collective knowledge, now must also account for
+the fact that an AI agent can effectively bridge the gap between
+intention and implementation across language boundaries. So, you
+shouldn’t be afraid to reach for a language that is technically superior
+for a given task simply because you haven’t used it before.
+
+## Practical Observations on the Agentic Workflow
+
+Wes has written thoughtfully about the practical implications of this
+way of working, and several of his observations deserve wider attention.
+He notes that in the agentic development loop, fast compile-and-test
+cycles matter enormously. Agents compile and test one to two orders of
+magnitude more frequently than human developers, and so any friction in
+that cycle becomes a serious drag on productivity. This is one reason Go
+has proven so effective in this context: its compile times are ultrafast
+even for release builds, in contrast to something like Rust where
+release builds can involve minutes of linking and optimization.
+
+He also emphasizes the importance of painless software distribution.
+When you are creating numerous small tools to support your working
+process, the ability to produce self-contained, dependency-free binaries
+that can be easily deployed becomes essential. This is another area
+where Go and Rust have significant advantages over Python, which still
+requires dragging along an interpreter and managing virtual
+environments, a process that can feel, as Wes puts it, rather like the
+Java Virtual Machine from which we all once tried so desperately to free
+ourselves.
+
+The creation of roborev itself is an interesting commentary on the
+agentic workflow. One of the big challenges of working with AI coding
+agents is that the code they produce, while often impressive, is also
+often imperfect in ways that are easy to miss during a quick manual
+review. This is especially true when the code is in a language the human
+reviewer is not deeply experienced with. By building a tool that
+automates the review of every commit and can even fix the problems it
+finds, Wes has effectively created a quality assurance layer that makes
+the entire process more reliable and sustainable.
+
+## An Inspiration for the Rest of Us
+
+What makes all of this particularly noteworthy is not just the technical
+accomplishment but the spirit in which it has been undertaken. Wes
+McKinney is a Principal Architect at [Posit](https://posit.co/), and
+this recent burst of open source work has been done largely on nights
+and weekends, driven by enthusiasm and the sheer pleasure of building
+useful things. He is, by any reasonable measure, already one of the most
+accomplished figures in the data science community, and yet he continues
+to push forward with the kind of energy and curiosity that one more
+usually associates with someone just beginning their career.
+
+There is something inspiring about watching someone who could
+comfortably rest on a very impressive set of laurels instead choose to
+explore entirely new territory with such evident delight! His example
+suggests that the current generation of AI coding tools has the
+potential to unlock a new phase of productivity and creativity for
+experienced engineers who have spent years accumulating deep knowledge
+about what software ought to do and how systems ought to be designed but
+who have always been constrained by the mechanical overhead of
+translating that knowledge into code.
+
+The projects themselves are useful, practical, and solve real problems
+that many people face. To recap, he built: (1) a tool for continuous
+code review of agent output, (2) a system for archiving and searching
+decades of email, (3) a personal finance application built for power
+users, (4) a session viewer for making sense of accumulated AI
+conversations, and (5) a menu bar utility for monitoring AI token
+consumption. They are pieces of software that people are already using,
+and they were all produced by a single person working alongside AI
+agents over the course of a few months.
+
+## The Bigger Lesson
+
+If there is a single lesson to take away from Wes McKinney’s recent
+work, it is that we are entering a period in which individual engineers
+with the right combination of experience, taste, and ambition can
+accomplish things that would previously have required entire teams. The
+leverage provided by AI coding agents is real and substantial,
+particularly for people who have a clear vision of what they want to
+build and the engineering judgment to guide the process effectively.
+
+We should all feel encouraged by this example! Not everyone will build
+five open source projects in a few months, nor should they feel
+obligated to. But if you have an idea for a tool that would make your
+life or the lives of others better, the barriers to building it have
+never been lower. Just go for it, I say! And if the right language for
+the job is one you have never used, that shouldn’t stop you. If the
+project is ambitious, it is now possible to make meaningful progress on
+it in during off hours rather than waiting for the luxury of
+uninterrupted months of dedicated effort.
+
+Wes has spent his career making data more accessible and computing more
+productive for millions of people. It is fitting that he would be among
+the first to demonstrate so convincingly what this new era of agentic
+engineering makes possible, and that he has shared his methods and
+insights so openly through blog posts, on LinkedIn, and in conversations
+with the community. His work over these past few months is a testament
+to what happens when experience meets powerful new tools (and it is well
+worth our attention and admiration).
