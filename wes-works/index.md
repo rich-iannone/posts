@@ -11,14 +11,15 @@ Analysis](https://wesmckinney.com/book)*. In short, Wes has already
 accomplished enough for several lifetimes of distinguished work. But the
 most interesting chapter of his career may be unfolding right now.
 
-I’ve had a front-row seat. I work in open source at Posit, creating and
-maintaining R and Python packages. Wes and I aren’t in the same group
-(he’s working on Positron, the Data Science IDE by Posit) but I’ve been
-watching with amazement as his output has accelerated over the past few
-months. Given the rapid improvements in AI coding agents, these tools
-that are changing how even the most accomplished programmers approach
-building software. Wes’s response has been to embrace these workflows
-fully, and the results are pretty incredible.
+I’ve been watching it happen in real time. I work in open source at
+Posit, creating and maintaining R and Python packages. Wes and I aren’t
+in the same group (he’s working on Positron, the Data Science IDE by
+Posit) but I’ve been watching with amazement as his output has
+accelerated over the past few months. Given the rapid improvements in AI
+coding agents, these tools that are changing how even the most
+accomplished programmers approach building software. Wes’s response has
+been to embrace these workflows fully, and the results are pretty
+incredible.
 
 This post is my attempt to share what I’ve observed, and what I think
 readers, especially those curious about AI coding workflows, can learn
