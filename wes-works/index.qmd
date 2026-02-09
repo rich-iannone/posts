@@ -81,3 +81,9 @@ Wes's recent burst of open source work was done largely on nights and weekends, 
 
 Let yourself be inspired by this example. AI coding tools can unlock new phases of productivity and creativity for experienced engineers. The projects Wes built are practical, solve real problems, and were produced by a single person working alongside AI agents over just a few months.
 
+## My Takeaways
+
+Watching Wes's journey over these past few months has genuinely changed how I think about my own work. Here's what I'm carrying forward:
+
+**Leverage AI Agents** Individual engineers with the right combination of experience, taste, and ambition can now accomplish what once required entire teams. AI coding agents provide real leverage, especially for those with a clear vision and strong engineering judgment.
+
