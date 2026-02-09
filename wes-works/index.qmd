@@ -77,3 +77,7 @@ There is something inspiring about watching someone who could comfortably rest o
 
 The projects themselves are useful, practical, and solve real problems that many people face. To recap, he built: (1) a tool for continuous code review of agent output, (2) a system for archiving and searching decades of email, (3) a personal finance application built for power users, (4) a session viewer for making sense of accumulated AI conversations, and (5) a menu bar utility for monitoring AI token consumption. They are pieces of software that people are already using, and they were all produced by a single person working alongside AI agents over the course of a few months.
 
+## The Bigger Lesson
+
+If there is a single lesson to take away from Wes McKinney's recent work, it is that we are entering a period in which individual engineers with the right combination of experience, taste, and ambition can accomplish things that would previously have required entire teams. The leverage provided by AI coding agents is real and substantial, particularly for people who have a clear vision of what they want to build and the engineering judgment to guide the process effectively.
+
