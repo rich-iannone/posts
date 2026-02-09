@@ -69,10 +69,9 @@ In the era of AI coding agents, the barrier to working in an unfamiliar language
 
 Choose the best tool for the job, regardless of your personal familiarity. AI agents can bridge the gap between intention and implementation across language boundaries. Don't be afraid to reach for a language that's technically superior for a given task simply because you haven't used it before.
 
-## The Bigger Lesson
+## Optimize for Agentic Workflow
 
-If there is a single lesson to take away from Wes McKinney's recent work, it is that we are entering a period in which individual engineers with the right combination of experience, taste, and ambition can accomplish things that would previously have required entire teams. The leverage provided by AI coding agents is real and substantial, particularly for people who have a clear vision of what they want to build and the engineering judgment to guide the process effectively.
+Fast compile-and-test cycles matter enormously in agentic development. Agents compile and test far more frequently than human developers, so any friction in that cycle becomes a serious drag on productivity. Go's ultrafast compile times and painless software distribution make it ideal for this context. When creating numerous small tools, the ability to produce self-contained, dependency-free binaries is essential.
 
-We should all feel encouraged by this example! Not everyone will build five open source projects in a few months, nor should they feel obligated to. But if you have an idea for a tool that would make your life or the lives of others better, the barriers to building it have never been lower. Just go for it, I say! And if the right language for the job is one you have never used, that shouldn't stop you. If the project is ambitious, it is now possible to make meaningful progress on it in during off hours rather than waiting for the luxury of uninterrupted months of dedicated effort.
+Automate quality assurance wherever possible. Wes's roborev reviews every commit and can even fix problems automatically, making the process more reliable and sustainable. These are practical lessons for anyone working with AI coding agents.
 
-Wes has spent his career making data more accessible and computing more productive for millions of people. It is fitting that he would be among the first to demonstrate so convincingly what this new era of agentic engineering makes possible, and that he has shared his methods and insights so openly through blog posts, on LinkedIn, and in conversations with the community. His work over these past few months is a testament to what happens when experience meets powerful new tools (and it is well worth our attention and admiration).
