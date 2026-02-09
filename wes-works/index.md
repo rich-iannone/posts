@@ -43,8 +43,8 @@ high-quality software in a very short span of time. He has described
 himself as working harder and having more fun building than he has had
 in years, and the evidence for that claim is clearly visible in his
 public repositories. The pace of commits, releases, and new project
-announcements has been something to behold. Let us look at what he has
-actually shipped.
+announcements has been something to behold. Let’s take a closer look at
+what he has actually shipped…
 
 ### roborev: Continuous Code Review for Agents
 
