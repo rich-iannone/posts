@@ -67,6 +67,7 @@ A few things about Wes's approach are worth highlighting. First, he's fearless a
 
 Second, he's optimized everything around the agentic workflow (fast compile-and-test cycles, self-contained binaries, and automated code review on every commit). Minimizing friction in that loop matters a lot when agents are compiling and testing far more frequently than any person would.
 
+And third, this was all done on nights and weekends and was driven by enthusiasm. These are practical tools that solve real problems, produced by a single person working alongside AI agents over just a few months.
 
 ## My Takeaways
 
