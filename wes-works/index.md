@@ -14,21 +14,29 @@ most interesting chapter of his career may be unfolding right now.
 I’ve been watching it happen in real time. I work in open source at
 Posit, creating and maintaining R and Python packages. Wes and I aren’t
 in the same group (he’s working on Positron, the Data Science IDE by
-Posit) but I’ve been watching with amazement as his output has
-accelerated over the past few months. Given the rapid improvements in AI
-coding agents, these tools that are changing how even the most
-accomplished programmers approach building software. Wes’s response has
-been to embrace these workflows fully, and the results are pretty
-incredible.
+Posit) but I’ve been watching his GitHub activity with amazement over
+the past few months. His public timeline tells the story: five
+AI-centric open source projects, written in Python, Go, Swift, and Rust,
+shipped in rapid succession.
 
-This post is my attempt to share what I’ve observed, and what I think
-readers, especially those curious about AI coding workflows, can learn
-from his journey.
+<img src="images/timeline-wes.png"
+data-fig-alt="GitHub contribution calendar for Wes McKinney showing dense activity in late 2025 and early 2026, with red circles marking moneyflow, agent-session-viewer, VibePulse, roborev, and msgvault."
+alt="A timeline of Wes McKinney’s GitHub activity across 2025 and early 2026, with annotations marking the start of each of his five recent projects." />
+
+In this post, I’ll walk through Wes’s:
+
+- embrace of AI coding agents
+- five projects he shipped in rapid succession
+- usage of previously unfamiliar-to-him languages
+
+and share three lessons I’ve taken away for my own work.
 
 ## Two Claude Max Accounts and an Astonishing Pace
 
-Wes has been quite open about his current working methods, and they are
-worth looking into in some detail. He has been running two Claude Max
+Wes has been quite open about his methods, sharing his approach through
+[blog posts](https://wesmckinney.com/blog/agent-ergonomics/) and on
+[LinkedIn](https://www.linkedin.com/feed/update/urn:li:activity:7415390745798594560/).
+One detail worth noting: he has been running two Claude Max
 subscriptions simultaneously, which allows him to keep multiple AI
 coding agents working in parallel. The reasoning is practical: while one
 agent is occupied with a task in one project, he can direct the other to
@@ -39,15 +47,12 @@ productive output, where the bottleneck is no longer the speed at which
 code can be written but rather the speed at which Wes can conceive of,
 direct, and review the work being done.
 
-This arrangement has allowed him to produce an extraordinary volume of
-high-quality software in a very short span of time. He has described
-himself as working harder and having more fun building than he has had
-in years, and the evidence for that claim is clearly visible in his
-public repositories. The pace of commits, releases, and new project
-announcements has been something to behold. Let’s take a closer look at
-what he has actually shipped…
+As Wes [wrote recently](https://wesmckinney.com/blog/agent-ergonomics/),
+he’s “working harder and having more fun building than I have in years”.
+The pace of commits, releases, and new project announcements bears that
+out. Let’s take a closer look at what he has actually shipped…
 
-### First Steps: moneyflow for Personal Finance in the Terminal
+## First Steps: moneyflow for Personal Finance in the Terminal
 
 <img src="images/moneyflow-tui.svg"
 data-fig-alt="moneyflow terminal UI displaying personal finance transactions with merchant names, categories, and amounts"
@@ -70,7 +75,7 @@ While moneyflow was a tool coded using AI, Wes’s next three tools appear
 aimed at improving his process of coding with AI: essentially building
 the ship while sailing it.
 
-### `agent-session-viewer`, or, Making Sense of the Conversation Trail
+## `agent-session-viewer`, or, Making Sense of the Conversation Trail
 
 As anyone who works extensively with AI coding agents knows, the
 sessions pile up with remarkable speed, and finding that one
@@ -94,7 +99,7 @@ Rust.
 With the session logs under control, the next natural question was: how
 much is all of this costing?
 
-### VibePulse (Watching the Token Meter)
+## VibePulse (Watching the Token Meter)
 
 <img src="images/vibepulse-today.png"
 data-fig-alt="VibePulse macOS menu bar app showing a daily summary of Claude Code and Codex token consumption"
@@ -113,7 +118,7 @@ With visibility into sessions and spend, the remaining bottleneck was
 code quality: reviewing the ever-growing stream of agent-generated
 commits.
 
-### roborev, Continuous Code Review for Agents
+## roborev, Continuous Code Review for Agents
 
 <img src="images/roborev.png"
 data-fig-alt="roborev terminal UI displaying the review queue screen with commit reviews and their pass/fail verdicts"
@@ -147,7 +152,7 @@ His final project marks a full embrace of the agentic coding in Go
 lifestyle. (For more, see his post on [agent
 ergonomics](https://wesmckinney.com/blog/agent-ergonomics/).)
 
-### msgvault: Archive a Lifetime of Email
+## msgvault: Archive a Lifetime of Email
 
 <img src="images/msgvault-tui.svg"
 data-fig-alt="msgvault terminal UI displaying a list of email senders aggregated by message count and total size"
