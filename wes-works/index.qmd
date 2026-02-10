@@ -13,13 +13,13 @@ I've been watching it happen in real time. I work in open source at Posit, creat
 
 ![A timeline of Wes McKinney's GitHub activity across 2025 and early 2026, with annotations marking the start of each of his five recent projects.](images/timeline-wes.png){fig-alt="GitHub contribution calendar for Wes McKinney showing dense activity in late 2025 and early 2026, with red circles marking moneyflow, agent-session-viewer, VibePulse, roborev, and msgvault."}
 
-This post is my attempt to share what I've observed, and what I think readers, especially those curious about AI coding workflows, can learn from his journey. By looking at Wes's:
+In this post, I'll walk through Wes's:
 
 - embrace of AI coding agents
 - five projects he shipped in rapid succession
 - usage of previously unfamiliar-to-him languages
 
-I'll share three big lessons I've taken away for my own work.
+and share three lessons I've taken away for my own work.
 
 ## Two Claude Max Accounts and an Astonishing Pace
 
