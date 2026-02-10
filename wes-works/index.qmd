@@ -27,7 +27,7 @@ Wes has been quite open about his methods, sharing his approach through [blog po
 
 As Wes [wrote recently](https://wesmckinney.com/blog/agent-ergonomics/), he's "working harder and having more fun building than I have in years". The pace of commits, releases, and new project announcements bears that out. Let's take a closer look at what he has actually shipped...
 
-### First Steps: moneyflow for Personal Finance in the Terminal
+## First Steps: moneyflow for Personal Finance in the Terminal
 
 ![The moneyflow TUI showing a keyboard-driven interface for exploring personal finance transactions.](images/moneyflow-tui.svg){fig-alt="moneyflow terminal UI displaying personal finance transactions with merchant names, categories, and amounts"}
 
@@ -35,7 +35,7 @@ As Wes [wrote recently](https://wesmckinney.com/blog/agent-ergonomics/), he's "w
 
 While moneyflow was a tool coded using AI, Wes's next three tools appear aimed at improving his process of coding with AI: essentially building the ship while sailing it.
 
-### `agent-session-viewer`, or, Making Sense of the Conversation Trail
+## `agent-session-viewer`, or, Making Sense of the Conversation Trail
 
 As anyone who works extensively with AI coding agents knows, the sessions pile up with remarkable speed, and finding that one conversation where a particular problem was solved or a specific approach was discussed can become an exercise in frustration.
 
@@ -45,7 +45,7 @@ As anyone who works extensively with AI coding agents knows, the sessions pile u
 
 With the session logs under control, the next natural question was: how much is all of this costing?
 
-### VibePulse (Watching the Token Meter)
+## VibePulse (Watching the Token Meter)
 
 ![VibePulse menu bar views showing daily cumulative spend and 30-day usage breakdown.](images/vibepulse-today.png){fig-alt="VibePulse macOS menu bar app showing a daily summary of Claude Code and Codex token consumption"}
 
@@ -53,7 +53,7 @@ With the session logs under control, the next natural question was: how much is 
 
 With visibility into sessions and spend, the remaining bottleneck was code quality: reviewing the ever-growing stream of agent-generated commits.
 
-### roborev, Continuous Code Review for Agents
+## roborev, Continuous Code Review for Agents
 
 ![The roborev TUI showing the review queue with commit reviews, verdicts, and status.](images/roborev.png){fig-alt="roborev terminal UI displaying the review queue screen with commit reviews and their pass/fail verdicts"}
 
@@ -63,7 +63,7 @@ roborev solves this by reviewing every commit as it happens. It installs as a po
 
 With the full productivity stack in place (session viewer, token monitor, code reviewer), Wes had essentially fired up the full machine. His final project marks a full embrace of the agentic coding in Go lifestyle. (For more, see his post on [agent ergonomics](https://wesmckinney.com/blog/agent-ergonomics/).)
 
-### msgvault: Archive a Lifetime of Email
+## msgvault: Archive a Lifetime of Email
 
 ![The msgvault interactive TUI showing aggregated email senders with message counts and sizes.](images/msgvault-tui.svg){fig-alt="msgvault terminal UI displaying a list of email senders aggregated by message count and total size"}
 
