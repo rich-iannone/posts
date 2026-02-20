@@ -11,13 +11,14 @@ Analysis](https://wesmckinney.com/book)*. In short, Wes has already
 accomplished enough for several lifetimes of distinguished work. But the
 most interesting chapter of his career may be unfolding right now.
 
-I’ve been watching it happen in real time. I work in open source at
-Posit, creating and maintaining R and Python packages. Wes and I aren’t
-in the same group (he’s working on Positron, the Data Science IDE by
-Posit) but I’ve been watching his GitHub activity with amazement over
-the past few months. His public timeline tells the story: five
-AI-centric open source projects, written in Python, Go, Swift, and Rust,
-shipped in rapid succession.
+I’ve been watching it happen pretty much in real time. I work in open
+source at Posit, creating and maintaining R and Python packages. Wes and
+I aren’t in the same group (he’s working on Positron, the Data Science
+IDE by Posit) but nevertheless I’ve been watching his GitHub activity
+with amazement over the past few months (it appears a lot in my daily
+feeds). His public timeline tells the story: five AI-centric open source
+projects, written in Python, Go, Swift, and Rust, shipped in rapid
+succession.
 
 <img src="images/timeline-wes.png"
 data-fig-alt="GitHub contribution calendar for Wes McKinney showing dense activity in late 2025 and early 2026, with red circles marking moneyflow, agent-session-viewer, VibePulse, roborev, and msgvault."
@@ -36,11 +37,11 @@ and share three lessons I’ve taken away for my own work.
 Wes has been quite open about his methods, sharing his approach through
 [blog posts](https://wesmckinney.com/blog/agent-ergonomics/) and on
 [LinkedIn](https://www.linkedin.com/feed/update/urn:li:activity:7415390745798594560/).
-One detail worth noting: he has been running two Claude Max
+One detail worth noting is that he’s been running two Claude Max
 subscriptions simultaneously, which allows him to keep multiple AI
 coding agents working in parallel. The reasoning is practical: while one
 agent is occupied with a task in one project, he can direct the other to
-begin work on something else entirely. It also helps with usage limits,
+begin work on something else entirely. It also helps with usage limits
 since each subscription has per-period token quotas that heavy users can
 burn through quickly. The result is a kind of continuous pipeline of
 productive output, where the bottleneck is no longer the speed at which
@@ -67,34 +68,33 @@ numbers of transactions quickly. It uses [Polars](https://pola.rs/) for
 fast local data operations and provides drill-down analytics by
 merchant, category, or time period. All filtering, searching, and
 aggregation happens locally, with no API latency after the initial data
-download. It is the kind of tool that scratches a very particular itch,
-the sort of thing that a certain class of technically minded person has
-always wished existed, and Wes simply went ahead and built it.
+download. It’s a tool that seems to scratch a very particular itch and
+the sort of thing that a certain class of technically-minded person has
+always wished existed. Wes simply went ahead and built it.
 
-While moneyflow was a tool coded using AI, Wes’s next three tools appear
-aimed at improving his process of coding with AI: essentially building
-the ship while sailing it.
+While moneyflow was a tool created using AI, Wes’s next three tools
+appear to be aimed at improving his process of coding with AI:
+essentially building the ship while sailing it.
 
 ## `agent-session-viewer`, or, Making Sense of the Conversation Trail
 
 As anyone who works extensively with AI coding agents knows, the
-sessions pile up with remarkable speed, and finding that one
-conversation where a particular problem was solved or a specific
-approach was discussed can become an exercise in frustration.
+sessions pile up with great speed, and finding that one conversation
+where a particular problem was solved or a specific approach was
+discussed can be super frustrating.
 
 <img src="images/agent-session-viewer.png"
 data-fig-alt="agent-session-viewer showing a web UI with a list of AI coding sessions and a conversation view"
 alt="The agent-session-viewer web interface for browsing and searching AI coding sessions." />
 
 [`agent-session-viewer`](https://github.com/wesm/agent-session-viewer)
-addresses this directly, providing a web-based interface for browsing,
+addresses this directly by providing a web-based interface for browsing,
 searching, and revisiting sessions from Claude Code and Codex. It
 features full-text search across all sessions, live updates as active
 sessions progress, automatic background syncing, and the ability to
-export sessions as self-contained HTML documents or publish them as
-GitHub Gists for sharing with colleagues. It is written primarily in
-Python with a [Tauri](https://tauri.app/)-based native app component in
-Rust.
+export sessions as self-contained HTML documents (or published as GitHub
+Gists) for sharing with colleagues. It is written primarily in Python
+with a [Tauri](https://tauri.app/)-based native app component in Rust.
 
 With the session logs under control, the next natural question was: how
 much is all of this costing?
@@ -106,13 +106,13 @@ data-fig-alt="VibePulse macOS menu bar app showing a daily summary of Claude Cod
 alt="VibePulse menu bar views showing daily cumulative spend and 30-day usage breakdown." />
 
 [VibePulse](https://github.com/wesm/vibepulse) is a macOS menu bar
-application, written in Swift, that monitors Claude Code and Codex token
+application (written in Swift) that monitors Claude Code and Codex token
 consumption. It provides a daily cumulative spend view and a 30-day view
 with per-tool breakdowns, helping heavy users of AI coding agents keep
 an eye on how much computational resources they are actually consuming.
-It is a small but practical utility, the sort of thing one builds when
-one is using these tools so intensively that tracking the usage itself
-becomes a necessity.
+It is a small but practical utility, a thing you build when using these
+tools so intensively that tracking the usage itself becomes very
+necessary.
 
 With visibility into sessions and spend, the remaining bottleneck was
 code quality: reviewing the ever-growing stream of agent-generated
@@ -130,9 +130,9 @@ Perhaps the biggest of his recent projects is
 background code review system written in Go. The premise is elegantly
 simple and addresses a real problem in the emerging world of agentic
 software development. AI coding agents write code quickly, but they make
-mistakes, and under the old workflow the review of that code would come
-far too late to be useful, often after the agent had already moved on to
-the next task and the relevant context was lost.
+mistakes. Under the old workflow the review of that code would come far
+too late to be useful, often after the agent had already moved on to the
+next task and the relevant context was lost.
 
 roborev solves this by reviewing every commit as it happens. It installs
 as a post-commit hook, runs reviews in the background, and surfaces
@@ -142,9 +142,9 @@ Code, Gemini, Copilot, and others, and can even automatically fix the
 issues it finds through its `roborev fix` and `roborev refine` commands.
 The project has already reached version `0.26.0` with 55 releases, and
 it has attracted an engaged community of contributors. Wes himself has
-said that roborev has “totally transformed” his productivity, and one
-can easily see why: it closes the feedback loop on agent-generated code
-to something approaching real time.
+said that roborev has “totally transformed” his productivity. And you
+can easily see why as it closes the feedback loop on agent-generated
+code to something approaching real time.
 
 With the full productivity stack in place (session viewer, token
 monitor, code reviewer), Wes had essentially fired up the full machine.
@@ -169,7 +169,7 @@ query syntax, incremental sync via the Gmail History API, multi-account
 support, and content-addressed attachment deduplication. Perhaps most
 notably, it includes an MCP server so that AI assistants can search and
 analyze your full message history conversationally. The project has
-already gathered nearly a thousand stars on GitHub and has a growing
+already gathered over a thousand stars on GitHub and has a growing
 community on Discord.
 
 ## What Stands Out
@@ -215,4 +215,4 @@ started applying these lessons! I’m leaning on agents more, I worry a
 bit less about whether I know a language before reaching for it, and
 I’ve been building small tools I’d previously only daydreamed about. If
 Wes’s example is any indication, the best reason to start is that it’s
-just a lot of fun.
+just super fun.
