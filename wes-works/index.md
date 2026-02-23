@@ -81,7 +81,7 @@ sessions pile up with great speed, and finding that one conversation
 where a particular problem was solved or a specific approach was
 discussed can be super frustrating.
 
-<img src="images/agent-session-viewer.png"
+<img src="images/agents-view.png"
 data-fig-alt="agent-session-viewer showing a web UI with a list of AI coding sessions and a conversation view"
 alt="The agent-session-viewer web interface for browsing and searching AI coding sessions." />
 
