@@ -21,8 +21,8 @@ projects, written in Python, Go, Swift, and Rust, shipped in rapid
 succession.
 
 <img src="images/timeline-wes.png"
-data-fig-alt="GitHub contribution calendar for Wes McKinney showing dense activity in late 2025 and early 2026, with red circles marking moneyflow, agent-session-viewer, VibePulse, roborev, and msgvault."
-alt="A timeline of Wes McKinney’s GitHub activity across 2025 and early 2026, with annotations marking the start of each of his five recent projects." />
+data-fig-alt="GitHub contribution calendar for Wes McKinney showing dense activity in late 2025 and early 2026, with red circles marking moneyflow, Agents View, VibePulse, roborev, and msgvault."
+alt="A timeline of Wes McKinney’s GitHub activity across 2025 and early 2026, with annotations marking the start of each of his five recent projects. The agent-session-viewer annotation marks the start of the Agents View project (the former has since been archived)." />
 
 In this post, I’ll walk through Wes’s:
 
@@ -32,18 +32,16 @@ In this post, I’ll walk through Wes’s:
 
 and share three lessons I’ve taken away for my own work.
 
-## Two Claude Max Accounts and an Astonishing Pace
+## An Astonishing Pace
 
 Wes has been quite open about his methods, sharing his approach through
 [blog posts](https://wesmckinney.com/blog/agent-ergonomics/) and on
 [LinkedIn](https://www.linkedin.com/feed/update/urn:li:activity:7415390745798594560/).
-One detail worth noting is that he’s been running two Claude Max
-subscriptions simultaneously, which allows him to keep multiple AI
-coding agents working in parallel. The reasoning is practical: while one
-agent is occupied with a task in one project, he can direct the other to
-begin work on something else entirely. It also helps with usage limits
-since each subscription has per-period token quotas that heavy users can
-burn through quickly. The result is a kind of continuous pipeline of
+He runs \$200/month plans from both OpenAI and Anthropic, plus a Codex
+plan he uses exclusively for code review and planning. This lets him
+keep multiple AI coding agents working in parallel: while one agent is
+occupied with a task in one project, he can direct another to begin work
+on something else entirely. The result is a continuous pipeline of
 productive output, where the bottleneck is no longer the speed at which
 code can be written but rather the speed at which Wes can conceive of,
 direct, and review the work being done.
@@ -76,7 +74,7 @@ While moneyflow was a tool created using AI, Wes’s next three tools
 appear to be aimed at improving his process of coding with AI:
 essentially building the ship while sailing it.
 
-## `agent-session-viewer`, or, Making Sense of the Conversation Trail
+## Agents View: Making Sense of the Conversation Trail
 
 As anyone who works extensively with AI coding agents knows, the
 sessions pile up with great speed, and finding that one conversation
@@ -87,14 +85,15 @@ discussed can be super frustrating.
 data-fig-alt="agent-session-viewer showing a web UI with a list of AI coding sessions and a conversation view"
 alt="The agent-session-viewer web interface for browsing and searching AI coding sessions." />
 
-[`agent-session-viewer`](https://github.com/wesm/agent-session-viewer)
-addresses this directly by providing a web-based interface for browsing,
-searching, and revisiting sessions from Claude Code and Codex. It
-features full-text search across all sessions, live updates as active
-sessions progress, automatic background syncing, and the ability to
-export sessions as self-contained HTML documents (or published as GitHub
-Gists) for sharing with colleagues. It is written primarily in Python
-with a [Tauri](https://tauri.app/)-based native app component in Rust.
+[Agents View](https://www.agentsview.io/)
+([GitHub](https://github.com/wesm/agentsview)) addresses this directly.
+It’s a local web app (now rewritten in Go as a single binary) for
+browsing, searching, and revisiting sessions from Claude Code, Codex,
+and Gemini CLI. It features full-text search across all message content,
+live sync as active sessions progress, activity heatmaps and usage
+analytics, and the ability to export sessions for sharing. Everything
+runs locally with a SQLite database and an embedded Svelte frontend, so
+nothing leaves your machine.
 
 With the session logs under control, the next natural question was: how
 much is all of this costing?
