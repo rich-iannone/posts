@@ -21,8 +21,8 @@ projects, written in Python, Go, Swift, and Rust, shipped in rapid
 succession.
 
 <img src="images/timeline-wes.png"
-data-fig-alt="GitHub contribution calendar for Wes McKinney showing dense activity in late 2025 and early 2026, with red circles marking moneyflow, Agents View, VibePulse, roborev, and msgvault."
-alt="A timeline of Wes McKinney’s GitHub activity across 2025 and early 2026, with annotations marking the start of each of his five recent projects. The agent-session-viewer annotation marks the start of the Agents View project (the former has since been archived)." />
+data-fig-alt="GitHub contribution calendar for Wes McKinney showing dense activity in late 2025 and early 2026, with red circles marking moneyflow, Agents View, VibePulse, roborev, msgvault, and Spicy Takes."
+alt="A timeline of Wes McKinney’s GitHub activity across 2025 and early 2026, with annotations marking the start of each of his five recent projects." />
 
 In this post, I’ll walk through Wes’s:
 
