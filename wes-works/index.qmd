@@ -88,3 +88,11 @@ Watching Wes's journey over these past few months has genuinely changed how I th
 **Share Your Methods:** Wes's openness in sharing his methods and insights is a model for the community. Experience, paired with powerful new tools, can unlock remarkable productivity and creativity.
 
 As someone who maintains open source packages for a living, I've already started applying these lessons! I'm leaning on agents more, I worry a bit less about whether I know a language before reaching for it, and I've been building small tools I'd previously only daydreamed about. If Wes's example is any indication, the best reason to start is that it's just super fun.
+
+## Late Addition: Spicy Takes
+
+Just as this post was wrapping up, Wes reminded me about [Spicy Takes](https://spicytakes.org/) ([GitHub](https://github.com/wesm/spicytakes.org)), a project he's poured a tremendous number of tokens into and one that gives him a lot of joy.
+
+Spicy Takes is a multi-blog archive and analysis platform built on a simple premise: people are too busy to read blog posts. Starting from that observation, Wes built a system that scrapes posts from notable technical writers, runs them through an LLM pipeline to extract summaries, key quotes, and theme tags, and then assigns each quote a "spiciness" score from 1 to 10 based on how provocative it is. The site now covers 33 blogs with over 11,000 posts and 62,000 quotes.
+
+Spicy Takes is a perfect example of the pattern running through all of Wes's recent work, which is to: (1) start with a problem you personally have, (2) use AI agents to build the solution fast, and (3) then discover that other people want it too.
