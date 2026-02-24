@@ -11,7 +11,7 @@ Wes McKinney is best known as the creator of [pandas](https://pandas.pydata.org/
 
 I've been watching it happen pretty much in real time. I work in open source at Posit, creating and maintaining R and Python packages. Wes and I aren't in the same group (he's working on Positron, the Data Science IDE by Posit) but nevertheless I've been watching his GitHub activity with amazement over the past few months (it appears a lot in my daily feeds). His public timeline tells the story: five AI-centric open source projects, written in Python, Go, Swift, and Rust, shipped in rapid succession.
 
-![A timeline of Wes McKinney's GitHub activity across 2025 and early 2026, with annotations marking the start of each of his five recent projects. The agent-session-viewer annotation marks the start of the Agents View project (the former has since been archived).](images/timeline-wes.png){fig-alt="GitHub contribution calendar for Wes McKinney showing dense activity in late 2025 and early 2026, with red circles marking moneyflow, Agents View, VibePulse, roborev, and msgvault."}
+![A timeline of Wes McKinney's GitHub activity across 2025 and early 2026, with annotations marking the start of each of his five recent projects.](images/timeline-wes.png){fig-alt="GitHub contribution calendar for Wes McKinney showing dense activity in late 2025 and early 2026, with red circles marking moneyflow, Agents View, VibePulse, roborev, msgvault, and Spicy Takes."}
 
 In this post, I'll walk through Wes's:
 
