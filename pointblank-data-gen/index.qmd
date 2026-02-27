@@ -1,0 +1,374 @@
+---
+title: "Building Realistic Fake Datasets with Pointblank"
+author: "Rich Iannone"
+date: "2026-02-27"
+description: >
+  Pointblank's new `generate_dataset()` function lets you define a schema and produce
+  realistic, coherent synthetic data in one call. Here's how to put it to work.
+jupyter: pointblank-blog
+---
+
+```{python}
+#| echo: false
+import warnings
+warnings.filterwarnings("ignore")
+```
+
+Every data practitioner eventually runs into the same problem: you need data, but you don't have it. It could be that the production database is locked behind access controls. Or, you might have the situation where the dataset you need doesn't exist yet (because the feature hasn't shipped). Maybe you're writing tests, building a demo, or teaching a workshop and you need something that *looks* real but carries zero risk. Whatever the reason, the need for synthetic data is everywhere, and it comes up far more often than most of us would like to admit.
+
+The great news here is that fake can be just as good. If your synthetic data has the right shape, the right types, the right distributions, and the right internal consistency, it can stand in for real data in many different situations.
+
+[Pointblank](https://github.com/posit-dev/pointblank) is a Python library for data validation, but over the last several releases (`v0.20.0`, `v0.21.0`, and `v0.22.0`) we've been building out a complementary capability: *data generation*. The idea is simple. You define a schema (the columns, their types, and their constraints) and Pointblank produces *n* rows of data that conform to it. The result is a Polars or Pandas DataFrame, ready to use.
+
+In this post I'll walk through the `generate_dataset()` function in some depth, show how to build realistic datasets for common scenarios (including a customer data example you might actually use), and highlight the country-specific and coherence features that make the generated data feel surprisingly real.
+
+::: {.callout-note}
+All examples here use `pb.preview()` to display results, which renders a compact HTML table showing the head and tail of the dataset. If you want to follow along, install Pointblank with `pip install pointblank` and make sure you have [Polars](https://pola.rs/) available.
+:::
+
+## Starting Simple: A Schema and a Dataset
+
+Everything begins with a `Schema` object. You declare columns as keyword arguments, using field specification functions to describe each one:
+
+```{python}
+import pointblank as pb
+
+schema = pb.Schema(
+    id=pb.int_field(min_val=1000, max_val=9999, unique=True),
+    score=pb.float_field(min_val=0.0, max_val=100.0),
+    passed=pb.bool_field(p_true=0.7),
+)
+
+pb.preview(pb.generate_dataset(schema, n=10, seed=23))
+```
+
+Three columns, three types, ten rows. The `seed=23` parameter makes the output reproducible. The `id` column has unique integers in the range 1000–9999, `score` is a uniform float between 0 and 100, and `passed` is `True` about 70% of the time.
+
+This is already useful for quick prototyping, but the real power shows up when you start using string presets.
+
+## String Presets: Names, Emails, Cities, and More
+
+The `string_field()` function accepts a `preset` parameter that taps into Pointblank's built-in data generators. There are over 40 presets covering personal information, locations, business data, internet artifacts, and more. Here's a small example:
+
+```{python}
+schema = pb.Schema(
+    name=pb.string_field(preset="name"),
+    email=pb.string_field(preset="email"),
+    city=pb.string_field(preset="city"),
+    company=pb.string_field(preset="company"),
+)
+
+pb.preview(pb.generate_dataset(schema, n=10, seed=23))
+```
+
+Notice that the email addresses aren't random gibberish. They're derived from the person's name. This is one of Pointblank's *coherence systems* at work, and it activates automatically when certain presets appear together in the same schema.
+
+## Building a Realistic Customer Dataset
+
+Let's put these pieces together for a scenario that comes up constantly in practice: generating a table of customer records. This is the kind of dataset you might need for a dashboard prototype, a workshop exercise, or integration testing of a CRM pipeline.
+
+```{python}
+from datetime import date
+
+schema = pb.Schema(
+    customer_id=pb.int_field(min_val=10000, max_val=99999, unique=True),
+    first_name=pb.string_field(preset="first_name"),
+    last_name=pb.string_field(preset="last_name"),
+    email=pb.string_field(preset="email"),
+    phone=pb.string_field(preset="phone_number"),
+    city=pb.string_field(preset="city"),
+    state=pb.string_field(preset="state"),
+    postcode=pb.string_field(preset="postcode"),
+    signup_date=pb.date_field(
+        min_date=date(2022, 1, 1),
+        max_date=date(2025, 12, 31),
+    ),
+    is_active=pb.bool_field(p_true=0.8),
+    lifetime_spend=pb.float_field(min_val=0.0, max_val=5000.0),
+)
+
+customers = pb.generate_dataset(schema, n=50, seed=23)
+
+pb.preview(customers)
+```
+
+What we get here is 50 rows of plausible customer data. The city, state, and postcode are coherent within each row (a customer in `"San Antonio"` will have a Texas state code and a valid Texas zip code). The email is derived from the customer's name. The phone number matches the region. None of this required any manual wiring. Pointblank detects the preset combinations and applies the appropriate coherence rules.
+
+### Extending with Polars
+
+Since the default output is a Polars DataFrame, you can immediately layer on transformations. Let's add a loyalty tier based on lifetime spend:
+
+```{python}
+import polars as pl
+
+customers_tiered = customers.with_columns(
+    pl.when(pl.col("lifetime_spend") >= 3000)
+    .then(pl.lit("Gold"))
+    .when(pl.col("lifetime_spend") >= 1000)
+    .then(pl.lit("Silver"))
+    .otherwise(pl.lit("Bronze"))
+    .alias("loyalty_tier")
+)
+
+pb.preview(customers_tiered)
+```
+
+Or compute a summary by state:
+
+```{python}
+pb.preview(
+    customers_tiered
+    .group_by("state", "loyalty_tier")
+    .agg(
+        pl.col("customer_id").count().alias("count"),
+        pl.col("lifetime_spend").mean().alias("avg_spend"),
+    )
+    .sort("state", "loyalty_tier")
+)
+```
+
+This is the workflow I keep on coming back to! We can use Pointblank to generate the raw material, and then get Polars in there to shape it into whatever you actually need.
+
+## Country-Specific Data
+
+One of the features I'm most excited about is country-specific data generation. Pointblank ships with locale data for **100 countries**, covering names, cities, states/provinces, postcodes, phone number formats, and much more. Switching locales is a single parameter (`country=`); here's an example that gets person data for Germany (`"DE"`):
+
+```{python}
+schema = pb.Schema(
+    name=pb.string_field(preset="name"),
+    email=pb.string_field(preset="email"),
+    city=pb.string_field(preset="city"),
+    state=pb.string_field(preset="state"),
+    phone=pb.string_field(preset="phone_number"),
+)
+
+pb.preview(pb.generate_dataset(schema, n=8, seed=23, country="DE"))
+```
+
+What you see in the above dataset are German names, cities, and phone numbers (where area codes match the locations). Switch to `"AU"` and you get Australian data:
+
+```{python}
+pb.preview(pb.generate_dataset(schema, n=8, seed=23, country="AU"))
+```
+
+Or Brazilian data:
+
+```{python}
+pb.preview(pb.generate_dataset(schema, n=8, seed=23, country="BR"))
+```
+
+The country parameter accepts ISO alpha-2 codes (`"US"`, `"DE"`, `"JP"`) and alpha-3 codes (`"USA"`, `"DEU"`, `"JPN"`).
+
+### Mixing Multiple Countries
+
+For datasets that need to represent a multinational user base, pass a list for an equal distribution, or, a dictionary for weighted proportions:
+
+```{python}
+schema = pb.Schema(
+    name=pb.string_field(preset="name"),
+    email=pb.string_field(preset="email"),
+    city=pb.string_field(preset="city"),
+    country=pb.string_field(preset="country"),
+)
+
+# Weighted: 60% US, 25% Germany, 15% Japan
+mixed = pb.generate_dataset(
+    schema, n=20, seed=23,
+    country={"US": 0.60, "DE": 0.25, "JP": 0.15},
+)
+
+pb.preview(mixed)
+```
+
+By default, rows from different countries are shuffled (set `shuffle=False` to keep them grouped by country instead).
+
+This kind of multinational dataset is really valuable in practice. If you're building a global e-commerce platform, you need test data that reflects customers in multiple regions. Other uses include: fintech applications processing cross-border transactions, logistics companies tracking shipments through different postal systems, and SaaS products localizing their onboarding flows. All of these use cases can benefit from synthetic data that accurately represents the countries involved, rather than defaulting to US-only placeholders.
+
+## The Three Coherence Systems
+
+I touched a bit on coherence earlier, but it's worth spelling out explicitly because it's one of the things that separates Pointblank's generator from a bag of random values.
+
+The package applies three coherence systems automatically based on which presets you include.
+
+### Person coherence
+
+When `name`, `first_name`, `last_name`, `email`, or `user_name` presets appear together, emails and usernames are derived from the person's actual name.
+
+### Address coherence
+
+When `city`, `state`, `postcode`, `phone_number`, `latitude`, `longitude`, or `license_plate` presets appear together, all values are consistent for the same geographic location within each row.
+
+### Business coherence
+
+When both `job` and `company` appear, they're drawn from the same industry. If `name_full` is also present, people in certain professions get appropriate titles (Dr., Prof., etc.), and any integer field for age is automatically constrained to a realistic working range of 22–65.
+
+### An example that makes use of all three types
+
+Here's a more comprehensive example with many uses of `string_field(preset=)`:
+
+```{python}
+schema = pb.Schema(
+    name=pb.string_field(preset="name_full"),
+    email=pb.string_field(preset="email"),
+    company=pb.string_field(preset="company"),
+    job=pb.string_field(preset="job"),
+    city=pb.string_field(preset="city"),
+    state=pb.string_field(preset="state"),
+    postcode=pb.string_field(preset="postcode"),
+    age=pb.int_field(),
+)
+
+pb.preview(pb.generate_dataset(schema, n=12, seed=23))
+```
+
+Notice the professional titles on some names, the consistent city/state/postcode combinations, and the age values falling within a plausible working range.
+
+## Profile Fields: the Fast Path
+
+For the very common case of generating person-centric data, `profile_fields()` provides a shortcut. It returns a dictionary of pre-configured `StringField` objects that you unpack into a schema:
+
+```{python}
+schema = pb.Schema(
+    **pb.profile_fields(set="standard"),
+    account_id=pb.int_field(min_val=1, unique=True),
+)
+
+pb.preview(pb.generate_dataset(schema, n=10, seed=23))
+```
+
+The `"standard"` set includes `first_name`, `last_name`, `email`, `city`, `state`, `postcode`, and `phone_number`. There's also `"minimal"` (just name, email, and phone) and `"full"` (adds `address`, `company`, and `job`). You can further customize with `include=` and `exclude=` parameters to add or remove specific fields.
+
+## Regex Patterns for Structured Strings
+
+When none of the built-in presets fit, `string_field()` also accepts a `pattern=` parameter for regex-based generation. Pointblank's regex engine supports character classes, quantifiers, alternation, and groups:
+
+```{python}
+schema = pb.Schema(
+    sku=pb.string_field(pattern=r"SKU-[A-Z]{2}-[0-9]{5}"),
+    tracking=pb.string_field(pattern=r"1Z[0-9]{4}[A-Z]{2}[0-9]{8}"),
+    code=pb.string_field(pattern=r"(ALPHA|BETA|GAMMA)-[0-9]{3}"),
+)
+
+pb.preview(pb.generate_dataset(schema, n=8, seed=23))
+```
+
+This is useful for generating product codes, tracking numbers, internal identifiers, or any string that follows a predictable format.
+
+## Categorical Columns and Nullable Fields
+
+For columns drawn from a fixed set of values, use the `allowed=` parameter:
+
+```{python}
+schema = pb.Schema(
+    plan=pb.string_field(allowed=["Free", "Pro", "Enterprise"]),
+    region=pb.string_field(allowed=["AMER", "EMEA", "APAC"]),
+    satisfaction=pb.int_field(allowed=[1, 2, 3, 4, 5]),
+    notes=pb.string_field(preset="user_agent", nullable=True, null_probability=0.3),
+)
+
+pb.preview(pb.generate_dataset(schema, n=12, seed=23))
+```
+
+The `nullable=True` and `null_probability=` parameters let you introduce realistic missing data. About 30% of the `notes` values will be null.
+
+## Frequency-Weighted Sampling
+
+By default, Pointblank uses *frequency-weighted sampling* for names and cities (`weighted=True`). This means you'll see common names like `"James"` or `"Maria"` appearing more often than rare ones, following a four-tier distribution: very common (45%), common (30%), uncommon (20%), and rare (5%).
+
+This produces datasets that feel more realistic than a uniform random draw. If you want every name to have an equal chance of appearing, set `weighted=False`.
+
+## A Larger Example: Event Log Data
+
+So far we've focused on person and business data, but `generate_dataset()` handles temporal and numeric types just as well. Let's build a simulated event log, the kind of table you'd see behind a product analytics dashboard. This schema brings together several field types we haven't combined yet: `datetime_field()` for timestamps, `duration_field()` for session lengths, `bool_field()` for success/failure flags, and the `"ipv4"` string preset for IP addresses.
+
+The `allowed=` parameter on `string_field()` is doing the work of defining the event vocabulary. Rather than generating random strings, it draws uniformly from the list of actions we provide, giving us a clean categorical column.
+
+```{python}
+from datetime import datetime, timedelta
+
+schema = pb.Schema(
+    event_id=pb.int_field(min_val=1, unique=True),
+    user_id=pb.int_field(min_val=1000, max_val=1050),
+    action=pb.string_field(
+        allowed=["page_view", "click", "purchase", "signup", "logout"]
+    ),
+    timestamp=pb.datetime_field(
+        min_date=datetime(2025, 11, 1),
+        max_date=datetime(2025, 11, 30, 23, 59, 59),
+    ),
+    duration=pb.duration_field(
+        min_duration=timedelta(seconds=1),
+        max_duration=timedelta(minutes=10),
+    ),
+    success=pb.bool_field(p_true=0.92),
+    ip_address=pb.string_field(preset="ipv4"),
+)
+
+events = pb.generate_dataset(schema, n=40, seed=23)
+
+pb.preview(events)
+```
+
+What we get is 40 rows of event data spread across November 2025. Each row has a unique event ID, a user ID drawn from a small pool (simulating repeat visitors), a random action, a timestamp within our date window, a session duration between 1 second and 10 minutes, a success flag that's `True` about 92% of the time, and a plausible IPv4 address. All from a single `generate_dataset()` call.
+
+Because the output is a Polars DataFrame, we can immediately run aggregations on it. Here's a quick summary grouped by action type, showing the count of events, the average success rate, and the mean duration:
+
+```{python}
+pb.preview(
+    events
+    .group_by("action")
+    .agg(
+        pl.col("event_id").count().alias("count"),
+        pl.col("success").mean().round(2).alias("success_rate"),
+        pl.col("duration").mean().alias("avg_duration"),
+    )
+    .sort("count", descending=True)
+)
+```
+
+This is the sort of exploratory analysis you might do while building a reporting pipeline or testing a dashboard query. The synthetic data gives you something to run your code against before the real event stream is available.
+
+## Validating What You Generate
+
+Pointblank started as a data validation library, and data generation turns out to be a natural extension of that core mission. The two capabilities complement each other quite well: the same `Schema` object that describes what your data *should* look like can also produce data that *does* look like that. This means you can build validation logic and test it against controlled synthetic inputs, all within one consistent API.
+
+There's a satisfying loop to this workflow. You define a schema, generate data from it, and then validate that the data meets your expectations. Here we generate 100 rows with a Field-based schema, then verify the structure with `col_schema_match()` using a dtype-based schema, and add a few value-level checks on top:
+
+```{python}
+gen_schema = pb.Schema(
+    id=pb.int_field(min_val=1, unique=True),
+    name=pb.string_field(preset="name"),
+    score=pb.float_field(min_val=0.0, max_val=100.0),
+    active=pb.bool_field(),
+)
+
+test_data = pb.generate_dataset(gen_schema, n=100, seed=23)
+
+# A dtype-based schema for structural validation
+val_schema = pb.Schema(
+    id="Int64",
+    name="String",
+    score="Float64",
+    active="Boolean",
+)
+
+validation = (
+    pb.Validate(data=test_data)
+    .col_schema_match(schema=val_schema)
+    .col_vals_between(columns="score", left=0.0, right=100.0)
+    .col_vals_not_null(columns="name")
+    .col_vals_gt(columns="id", value=0)
+    .rows_distinct(columns_subset="id")
+    .interrogate()
+)
+
+validation
+```
+
+The generated data should pass all checks, giving you a clean baseline for your validation logic. In practice, this is how you'd develop and refine validation rules before pointing them at real data: generate a known-good dataset, confirm your checks pass, then swap in the production table and see what fails. Having generation and validation in the same package makes that iteration cycle very tight.
+
+## Wrapping Up
+
+Synthetic data generation sits at the intersection of several real needs: testing, prototyping, teaching, and privacy. Pointblank's `generate_dataset()` tries to make it practical by handling the tedious parts automatically (type-appropriate random values, coherent cross-column relationships, country-specific formatting) so you can focus on the shape of the data you actually need.
+
+Define a schema, call `generate_dataset()`, and you have a DataFrame ready to go, which is the sort of simplicity that matters when you need data but can't use the real thing. If you'd like to explore further, the [Pointblank website](https://posit-dev.github.io/pointblank/) has extensive documentation on data generation, including a dedicated User Guide section and full API documentation for every field type and function covered here.
