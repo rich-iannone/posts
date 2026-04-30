@@ -140,6 +140,8 @@ In short, the YAML that people complain about is YAML 1.1. The specification tha
 
 ## The Python YAML parser landscape
 
+[PyYAML](https://github.com/yaml/pyyaml), written by Kirill Simonov in 2006, is the de facto standard YAML library in Python. It wraps LibYAML (a C library) for performance and provides a pure-Python fallback. It is downloaded millions of times per week, it is a dependency of countless packages, and it implements YAML 1.1. This last fact is the root of most YAML complaints in the Python ecosystem. When someone says "YAML parsed my country code as a boolean", they are describing PyYAML's behavior, not YAML's specification. PyYAML's GitHub repository shows over 200 open issues and 100 open pull requests.[^11] The project is maintained but moves slowly, and a major version bump to YAML 1.2 semantics has not materialized.
+
 
 ## Introducing py-yaml12
 
