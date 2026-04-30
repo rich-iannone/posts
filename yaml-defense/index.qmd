@@ -76,6 +76,8 @@ The trouble begins when configuration needs to express depth. TOML's handling of
 
 ## What YAML 1.2 changed
 
+The YAML 1.2 specification was published in 2009, with a clarifying revision (1.2.2) completed in October 2021.[^10] Its changes address the complaints described above directly.
+
 
 ## The Python YAML parser landscape
 
