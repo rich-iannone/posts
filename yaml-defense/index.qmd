@@ -39,6 +39,24 @@ YAML (2001) and TOML (2013) each arose to fill that gap, and both positioned the
 ## The case against YAML (as it was)
 
 The criticisms of YAML are not fabricated. They reflect real experiences that real programmers had over many years.
+
+The most infamous problem is the Norway incident, which has become shorthand for YAML's implicit typing behavior. In YAML 1.1, the bare scalar `NO` was interpreted as the boolean value `false`. This meant that a list of country codes would silently transform Norway into a falsehood:
+
+```yaml
+# What you wrote:
+countries:
+  - dk
+  - fi
+  - is
+  - no
+  - se
+
+# What YAML 1.1 parsed:
+# ["dk", "fi", "is", false, "se"]
+```
+
+The same applied to `yes`, `on`, `off`, `y`, `n`, and various capitalizations thereof. Ruud van Asseldonk's widely-circulated "YAML Document from Hell"[^5] catalogued these and other problems: port mappings like `22:22` parsed as sexagesimal (base-60) integers, version numbers like `10.23` parsed as floats rather than strings, and tags beginning with `!` could trigger arbitrary code execution in some parsers.
+
 ## What TOML gets right
 
 TOML deserves some credit. For flat or shallow configuration structures, it is clean, readable, and unambiguous. The syntax is familiar to anyone who has seen an INI file, but with the addition of explicit types, a formal specification, and support for nested tables via dot-separated keys.
