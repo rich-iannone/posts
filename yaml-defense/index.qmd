@@ -63,6 +63,8 @@ These were not edge cases encountered only by the reckless. They emerged from th
 
 TOML deserves some credit. For flat or shallow configuration structures, it is clean, readable, and unambiguous. The syntax is familiar to anyone who has seen an INI file, but with the addition of explicit types, a formal specification, and support for nested tables via dot-separated keys.
 
+Consider a `pyproject.toml` or a `Cargo.toml`. These files are typically one or two levels deep, with well-defined sections and predictable content. TOML handles them well. Strings are always quoted, so there is no ambiguity about whether `no` is a boolean or the word "no". Integers are integers, floats are floats, and dates are first-class types. Comments work exactly as you would expect. For this class of problem, TOML works well, and its adoption by the Python packaging ecosystem (PEP 518)[^7] and the Rust community (Cargo) makes sense.
+
 ## Where TOML strains
 
 
