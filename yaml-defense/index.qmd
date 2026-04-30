@@ -128,6 +128,7 @@ cpu = "0.5"
 
 The reader must mentally reconstruct the tree from a flat sequence of qualified names. The StrictYAML documentation measured this concretely: equivalent TOML files use approximately 50% more characters to represent the same data, largely because of the repeated path prefixes.[^9]
 
+There is also the matter of meaningful indentation itself. Python demonstrated decades ago that indentation as structure is not a weakness but a strength: it eliminates the class of bugs where visual structure disagrees with syntactic structure. YAML inherits this property. TOML does not require indentation (though many authors add it voluntarily, as a non-parsed visual aid), which means that the relationship between a key and its containing table exists only in the section header, not in the physical layout of the file. For deeply nested configurations, this makes TOML files harder to scan and harder to edit confidently.
 
 ## What YAML 1.2 changed
 
