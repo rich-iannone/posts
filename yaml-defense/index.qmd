@@ -26,3 +26,7 @@ Every programmer has opinions about configuration files. These opinions tend to 
 
 The case against YAML was, for a long time, a reasonable one. The format attracted its critics for real reasons, through years of surprising behavior that burned even careful users. But the specification evolved, and the tooling is finally catching up. To understand why the current consensus is outdated, we need to trace the lineage of configuration formats themselves, because this sort of argument has played out before.
 
+## A brief history of configuration formats
+
+The INI file emerged in the early 1980s alongside MS-DOS and the first versions of Windows.[^1] It was the simplest thing that could possibly work: key-value pairs, grouped into sections denoted by square brackets, with semicolons for comments. They are flat, readable, and human-editable. For the needs of that era (like configuring device drivers, specifying font paths, or setting application preferences) it was entirely adequate. Its only real limitation was structural: you could not nest deeper than one level, and there was no formal specification, which meant every parser implemented its own dialect. But for two decades, this was fine.
+
