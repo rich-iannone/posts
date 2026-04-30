@@ -59,6 +59,8 @@ The same applied to `yes`, `on`, `off`, `y`, `n`, and various capitalizations th
 
 These were not edge cases encountered only by the reckless. They emerged from the YAML 1.1 specification's design philosophy of aggressive implicit typing, where the parser attempted to be "helpful" by guessing the intended type of unquoted values. The intention was readability (you could write `true` without quotes and get a boolean), but the result was unpredictable behavior in practice. Configuration files are precisely the domain where surprising behavior is least tolerable. They are edited infrequently, often by people who did not write the original file, and a silent misparse can propagate through a system undetected for months.
 
+The complexity of the full specification compounded the problem. The YAML 1.2.2 spec runs to ten chapters with sections numbered four levels deep.[^6] There are dozens of ways to express multiline strings. Anchors and aliases create a reference system that, while powerful, adds conceptual weight far beyond what most configuration tasks require. And the security implications of tag-based object deserialization (the `yaml.load()` vulnerability in Python) became a well-known attack vector.[^17] All of these criticisms were valid, and they were valid specifically of YAML 1.1 and the tooling ecosystem built around it.
+
 ## What TOML gets right
 
 TOML deserves some credit. For flat or shallow configuration structures, it is clean, readable, and unambiguous. The syntax is familiar to anyone who has seen an INI file, but with the addition of explicit types, a formal specification, and support for nested tables via dot-separated keys.
