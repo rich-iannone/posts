@@ -37,3 +37,6 @@ JSON appeared as the lightweight reaction. Douglas Crockford, who claims to have
 ## The case against YAML (as it was)
 
 The criticisms of YAML are not fabricated. They reflect real experiences that real programmers had over many years.
+## What TOML gets right
+
+TOML deserves some credit. For flat or shallow configuration structures, it is clean, readable, and unambiguous. The syntax is familiar to anyone who has seen an INI file, but with the addition of explicit types, a formal specification, and support for nested tables via dot-separated keys.
