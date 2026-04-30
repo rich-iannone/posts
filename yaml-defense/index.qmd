@@ -145,6 +145,38 @@ In short, the YAML that people complain about is YAML 1.1. The specification tha
 
 ## Introducing py-yaml12
 
+The [`py-yaml12`](https://github.com/posit-dev/py-yaml12) library is a YAML 1.2 parser and formatter for Python, implemented in Rust for speed and correctness. It is built on the `saphyr` crate[^14] (a Rust YAML library) and exposes a minimal, focused API: `parse_yaml()` and `read_yaml()` for loading, `format_yaml()` and `write_yaml()` for serialization.
+
+The design philosophy is straightforward. For the vast majority of use cases, you work with plain Python builtins end to end: `dict`, `list`, `int`, `float`, `str`, and `None`. There is no special document class, no custom node types in the common path. Because YAML 1.2 is a superset of JSON, all valid JSON parses identically. The library achieves 100% compliance with the yaml-test-suite,[^15] the community-maintained corpus of edge cases and conformance tests.
+
+```{python}
+from yaml12 import parse_yaml, format_yaml
+from pprint import pprint
+
+config = """
+server:
+  host: 0.0.0.0
+  port: 8080
+  debug: false
+
+database:
+  url: postgres://localhost/mydb
+  pool_size: 5
+  
+regions:
+  - us-east-1
+  - eu-west-1
+  - no         # Norway, not false
+"""
+
+doc = parse_yaml(config)
+pprint(doc)
+```
+
+Notice the `no` in the regions list. Under PyYAML (YAML 1.1), this would silently become `False`. Under `py-yaml12` (YAML 1.2), it is the string `"no"`, as the specification requires. This single behavioral difference encapsulates the entire argument: the format is not broken, the old tooling was.
+
+For advanced YAML features (tagged values, complex mapping keys, multi-document streams), `py-yaml12` provides the `Yaml` wrapper type, but these are opt-in and unnecessary for typical configuration work:
+
 
 ## Conclusion
 
