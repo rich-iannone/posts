@@ -43,3 +43,6 @@ TOML deserves some credit. For flat or shallow configuration structures, it is c
 
 ## Where TOML strains
 
+
+## What YAML 1.2 changed
+
