@@ -1,0 +1,12 @@
+---
+title: "In Defense of YAML"
+description: >
+  A common refrain among developers: YAML is bad and TOML is good. This
+  post argues otherwise, tracing the history of configuration formats,
+  examining what YAML 1.2 actually fixed, and introducing py-yaml12, a
+  new Rust-backed Python library for working with the modern spec.
+people:
+  - Richard Iannone
+date: '2026-05-05'
+---
+Every programmer has opinions about configuration files. These opinions tend to be strongly held and inversely proportional to the stakes involved. In the last few years, the consensus view has shifted: YAML is bad, TOML is good, and enthusiastic users of YAML just might be plainly uninformed. This post takes a different view. We intend to present an argument for YAML which is grounded in history, its specification, and the state of tooling in 2026.
