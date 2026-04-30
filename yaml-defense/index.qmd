@@ -223,3 +223,36 @@ This is, in the end, a familiar pattern in computing. Every generation of config
 
 In the meantime, you can `pip install py-yaml12` and see what a YAML 1.2 implementation looks like in Python. The Norway problem is solved. The specification is clear. The tooling has caught up.
 
+[^1]: Wikipedia, "[INI file](https://en.wikipedia.org/wiki/INI_file)".
+
+[^2]: Douglas Crockford, "[The JSON Saga](https://www.youtube.com/watch?v=-C-JoyNuQJs)", presentation at Yahoo, 2011.
+
+[^3]: Douglas Crockford, in the same presentation (see [^2]), explains that comments were removed because "people were using comments to hold parsing directives".
+
+[^4]: Tom Preston-Werner, "[TOML: Tom's Obvious Minimal Language](https://toml.io/en/)".
+
+[^5]: Ruud van Asseldonk, "[The yaml document from hell](https://ruudvanasseldonk.com/2023/01/11/the-yaml-document-from-hell)", January 2023.
+
+[^6]: "[YAML Ain't Markup Language (YAML) Version 1.2, Revision 1.2.2](https://yaml.org/spec/1.2.2/)", October 2021.
+
+[^7]: Brett Cannon et al., "[PEP 518 -- Specifying Minimum Build System Requirements for Python Projects](https://peps.python.org/pep-0518/)", 2016.
+
+[^8]: Martin Vejnár (avakar), comment on [avakar/pytoml#15](https://github.com/avakar/pytoml/issues/15#issuecomment-217804599), May 2016.
+
+[^9]: StrictYAML documentation, "[What is wrong with TOML?](https://hitchdev.com/strictyaml/why-not/toml/)".
+
+[^10]: "[YAML Ain't Markup Language (YAML) Version 1.2, Revision 1.2.2](https://yaml.org/spec/1.2.2/)", October 2021.
+
+[^11]: [PyYAML GitHub repository](https://github.com/yaml/pyyaml), accessed April 2026.
+
+[^12]: [ruamel.yaml on PyPI](https://pypi.org/project/ruamel.yaml/).
+
+[^13]: [StrictYAML documentation](https://hitchdev.com/strictyaml/).
+
+[^14]: [saphyr crate](https://crates.io/crates/saphyr) on crates.io.
+
+[^15]: [yaml-test-suite](https://github.com/yaml/yaml-test-suite) on GitHub.
+
+[^16]: py-yaml12, "[Benchmarks](https://posit-dev.github.io/py-yaml12/benchmarks/benchmarks.html)".
+
+[^17]: "[CVE-2017-18342](https://nvd.nist.gov/vuln/detail/CVE-2017-18342)", National Vulnerability Database. CVSS 9.8 Critical: arbitrary code execution via `yaml.load()` with untrusted data in PyYAML before 5.1. See also PyYAML wiki, "[PyYAML yaml.load(input) Deprecation](https://github.com/yaml/pyyaml/wiki/PyYAML-yaml.load(input)-Deprecation)".
