@@ -40,3 +40,6 @@ The criticisms of YAML are not fabricated. They reflect real experiences that re
 ## What TOML gets right
 
 TOML deserves some credit. For flat or shallow configuration structures, it is clean, readable, and unambiguous. The syntax is familiar to anyone who has seen an INI file, but with the addition of explicit types, a formal specification, and support for nested tables via dot-separated keys.
+
+## Where TOML strains
+
