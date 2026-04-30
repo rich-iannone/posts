@@ -57,6 +57,8 @@ countries:
 
 The same applied to `yes`, `on`, `off`, `y`, `n`, and various capitalizations thereof. Ruud van Asseldonk's widely-circulated "YAML Document from Hell"[^5] catalogued these and other problems: port mappings like `22:22` parsed as sexagesimal (base-60) integers, version numbers like `10.23` parsed as floats rather than strings, and tags beginning with `!` could trigger arbitrary code execution in some parsers.
 
+These were not edge cases encountered only by the reckless. They emerged from the YAML 1.1 specification's design philosophy of aggressive implicit typing, where the parser attempted to be "helpful" by guessing the intended type of unquoted values. The intention was readability (you could write `true` without quotes and get a boolean), but the result was unpredictable behavior in practice. Configuration files are precisely the domain where surprising behavior is least tolerable. They are edited infrequently, often by people who did not write the original file, and a silent misparse can propagate through a system undetected for months.
+
 ## What TOML gets right
 
 TOML deserves some credit. For flat or shallow configuration structures, it is clean, readable, and unambiguous. The syntax is familiar to anyone who has seen an INI file, but with the addition of explicit types, a formal specification, and support for nested tables via dot-separated keys.
