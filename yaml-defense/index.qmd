@@ -21,4 +21,8 @@ tags:
 ported_categories:
   - Python Packages
 ---
+
 Every programmer has opinions about configuration files. These opinions tend to be strongly held and inversely proportional to the stakes involved. In the last few years, the consensus view has shifted: YAML is bad, TOML is good, and enthusiastic users of YAML just might be plainly uninformed. This post takes a different view. We intend to present an argument for YAML which is grounded in history, its specification, and the state of tooling in 2026.
+
+The case against YAML was, for a long time, a reasonable one. The format attracted its critics for real reasons, through years of surprising behavior that burned even careful users. But the specification evolved, and the tooling is finally catching up. To understand why the current consensus is outdated, we need to trace the lineage of configuration formats themselves, because this sort of argument has played out before.
+
