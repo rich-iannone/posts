@@ -94,3 +94,8 @@ ENV/
 env.bak/
 venv.bak/
 .claude/
+
+# Quarto rendered outputs
+*/index.html
+*/index.md
+*/index_files/
