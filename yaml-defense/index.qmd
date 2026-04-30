@@ -67,6 +67,8 @@ TOML deserves some credit. For flat or shallow configuration structures, it is c
 
 Consider a `pyproject.toml` or a `Cargo.toml`. These files are typically one or two levels deep, with well-defined sections and predictable content. TOML handles them well. Strings are always quoted, so there is no ambiguity about whether `no` is a boolean or the word "no". Integers are integers, floats are floats, and dates are first-class types. Comments work exactly as you would expect. For this class of problem, TOML works well, and its adoption by the Python packaging ecosystem (PEP 518)[^7] and the Rust community (Cargo) makes sense.
 
+TOML also benefits from simplicity of implementation. The specification is short enough that a competent programmer can write a compliant parser in a weekend. This means that the ecosystem of parsers is large, well-tested, and consistent. There is no equivalent of the YAML 1.1/1.2 version split. TOML 1.0 is TOML 1.0, everywhere. These are real advantages.
+
 ## Where TOML strains
 
 
