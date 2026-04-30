@@ -136,6 +136,7 @@ The YAML 1.2 specification was published in 2009, with a clarifying revision (1.
 
 The implicit typing that created the Norway problem is gone. In the YAML 1.2 Core Schema, only `true` and `false` (and their capitalizations `True`, `False`, `TRUE`, `FALSE`) are recognized as booleans. The words `yes`, `no`, `on`, `off`, `y`, and `n` are plain strings. Sexagesimal number literals (the `22:22` problem) are removed entirely. JSON is now a strict, proper subset of YAML 1.2, which means any valid JSON document parses identically as YAML. The tag resolution rules are tightened and clarified. The specification itself, while still substantial, is written more clearly and maintained openly on GitHub.
 
+In short, the YAML that people complain about is YAML 1.1. The specification that actually governs the language today is a different, safer, more predictable document. The problem is that most people's experience of YAML is mediated not by the specification but by their parser, and for most Python users, that parser has been PyYAML, which implements YAML 1.1 and has not changed its core semantics since 2006.
 
 ## The Python YAML parser landscape
 
