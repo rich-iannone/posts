@@ -142,6 +142,11 @@ In short, the YAML that people complain about is YAML 1.1. The specification tha
 
 [PyYAML](https://github.com/yaml/pyyaml), written by Kirill Simonov in 2006, is the de facto standard YAML library in Python. It wraps LibYAML (a C library) for performance and provides a pure-Python fallback. It is downloaded millions of times per week, it is a dependency of countless packages, and it implements YAML 1.1. This last fact is the root of most YAML complaints in the Python ecosystem. When someone says "YAML parsed my country code as a boolean", they are describing PyYAML's behavior, not YAML's specification. PyYAML's GitHub repository shows over 200 open issues and 100 open pull requests.[^11] The project is maintained but moves slowly, and a major version bump to YAML 1.2 semantics has not materialized.
 
+The [`ruamel.yaml`](https://github.com/ruamel/yaml) library, maintained by Anthon van der Neut, offers YAML 1.2 support with round-trip preservation of comments, flow style, and key order.[^12] It is widely used and is significantly more capable than PyYAML for tasks requiring comment preservation or format-aware editing. However, it is primarily a pure-Python implementation in its default round-trip mode, which makes it considerably slower than PyYAML's C-backed fast path. Its packaging history has also been complicated: namespace package issues and a dependency chain that has occasionally confused deployment pipelines.
+
+[StrictYAML](https://github.com/crdoconnor/strictyaml) takes a different approach entirely, implementing a deliberate subset of YAML with all implicit typing removed, no tags, no anchors, and no flow style.[^13] Philosophically it is closer to TOML than to full YAML: a safe, simple format that happens to use YAML's indentation syntax. It is Python-only, has no implementations in other languages, and does not aim for spec compliance.
+
+What has been missing from this landscape is a library that is fast, fully 1.2-compliant, and simple enough to use as a drop-in replacement for PyYAML's basic interface.
 
 ## Introducing py-yaml12
 
