@@ -182,6 +182,38 @@ Notice the `no` in the regions list. Under PyYAML (YAML 1.1), this would silentl
 
 For advanced YAML features (tagged values, complex mapping keys, multi-document streams), `py-yaml12` provides the `Yaml` wrapper type, but these are opt-in and unnecessary for typical configuration work:
 
+```{python}
+from yaml12 import read_yaml, write_yaml, format_yaml
+import tempfile
+import os
+
+data = {
+    "project": "my-app",
+    "version": "1.0.0",
+    "features": ["auth", "logging", "metrics"],
+    "settings": {
+        "timeout": 30,
+        "retries": 3,
+        "verbose": True,
+    },
+}
+
+path = os.path.join(tempfile.gettempdir(), "config.yaml")
+write_yaml(data, path)
+
+print(format_yaml(data))
+```
+
+The round-trip is lossless. Writing a Python dictionary to disk and reading it back produces an identical object:
+
+```{python}
+round_tripped = read_yaml(path)
+assert round_tripped == data
+
+print(f"Round-trip matches: {round_tripped == data}")
+```
+
+Performance is a practical concern for any library that might be called in startup paths or CI pipelines. The `py-yaml12` benchmarks[^16] compare read and write performance against PyYAML (both its default pure-Python path and the fast CSafeLoader/CSafeDumper backed by LibYAML) and `ruamel.yaml`, across file sizes ranging from kilobytes to megabytes. Because the core parsing and formatting logic is implemented in compiled Rust rather than interpreted Python, `py-yaml12` is competitive with PyYAML's C extension while maintaining full 1.2 compliance. As of this writing, few other Python libraries offer both.
 
 ## Conclusion
 
