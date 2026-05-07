@@ -29,7 +29,7 @@ With the release of `v0.10.0`, we have reached a nice, round number and it's wor
 
 ## 1. Auto-Discovery
 
-The original release (`v0.1`) shipped with the feature that defines the project's philosophy. When you run `great-docs init`, Great Docs inspects your package and discovers its public API automatically. It finds classes, functions, dataclasses, protocols, enumerations, exceptions, type aliases, and more, using a combination of runtime introspection and static analysis via [griffe](https://mkdocstrings.github.io/griffe/). It detects your docstring style (NumPy, Google, or Sphinx) and writes a `great-docs.yml` configuration file that captures the full structure of your API.
+The original release (`v0.1`) came out with the feature that defines the project's philosophy. When you run `great-docs init`, Great Docs inspects your package and discovers its public API automatically. It finds classes, functions, dataclasses, protocols, enumerations, exceptions, type aliases, and more, using a combination of runtime introspection and static analysis via [griffe](https://mkdocstrings.github.io/griffe/). It detects your docstring style (NumPy, Google, or Sphinx) and writes a `great-docs.yml` configuration file that captures the full structure of your API.
 
 ```{.yaml filename="great-docs.yml (generated)"}
 reference:
@@ -42,7 +42,7 @@ reference:
       contents: [ConfigError, BuildError]
 ```
 
-The practical consequence is that you don't have to enumerate your exports by hand. If you add a new class or function to your package, the next build picks it up. If you remove something, it disappears from the site. The configuration file exists so you can reorder sections, add display names, or exclude internal symbols, but the default is complete and correct without any manual intervention.
+The practical consequence is that you don't have to enumerate your exports by hand. If you add a new class or function to your package, the next build picks it up. If you remove something, it disappears from the site. The configuration file exists so you can reorder sections, add display names, or exclude internal symbols, but the default is complete and correct without any having to do any manual intervention.
 
 I suppose this was the design decision that everything else built on: if Great Docs can figure something out automatically, it should, and configuration should be for expressing preferences rather than providing information that we could have inferred.
 
