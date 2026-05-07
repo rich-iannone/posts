@@ -85,6 +85,8 @@ That single line transforms every "Next page" into "次のページ", every "Sea
 
 The reasoning behind this feature is straightforward: if your package has international users (and most packages do, whether they realize it or not), the friction of navigating a site where every label is in a language you do not speak fluently is real. Translating content is a large undertaking; translating UI chrome is something a tool can do for you.
 
+![A reference page for a class called TraiteurDeDonnees with all UI elements rendered in French.](assets/reference-page-french.png)
+
 ## 5. Keyboard Navigation
 
 The `v0.5` release added a full keyboard shortcut layer that ships with every documentation site. Press `/` or `s` to focus search. Press `[` and `]` to navigate to the previous or next page. Press `d` to toggle dark mode. Press `c` to copy the current page as Markdown. Press `h` or `?` to see a help overlay listing all available shortcuts.
