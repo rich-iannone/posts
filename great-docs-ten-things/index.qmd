@@ -50,7 +50,7 @@ This was the design decision everything else built on: if the tool can figure so
 
 The `v0.2` release added two capabilities that address different aspects of the same problem: making sure people can find your documentation and making sure what they find reads well.
 
-On the discoverability side, Great Docs now generates `sitemap.xml`, `robots.txt`, canonical URLs, and JSON-LD structured data automatically. Per-page Open Graph and Twitter Card meta tags are injected so that when someone shares a link to your documentation, the preview card shows a title, description, and image rather than a generic URL. The `great-docs seo` audit command checks your site for common problems (e.g., missing descriptions, broken canonical links, orphaned pages, etc.).
+On the discoverability side, Great Docs now generates `sitemap.xml`, `robots.txt`, canonical URLs, and JSON-LD structured data automatically. Per-page Open Graph meta tags are injected so that when someone shares a link to your documentation, the preview card shows a title, description, and image rather than a generic URL. The `great-docs seo` audit command checks your site for common problems (e.g., missing descriptions, broken canonical links, orphaned pages, etc.).
 
 ```{.bash filename="Terminal"}
 great-docs proofread
