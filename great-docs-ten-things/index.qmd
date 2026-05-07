@@ -78,14 +78,14 @@ Great Docs `v0.4` made it possible to present your entire documentation site in 
 
 ```{.yaml filename="great-docs.yml"}
 site:
-  language: ja
+  language: fr
 ```
 
-That single line transforms every "Next page" into "次のページ", every "Search" into "検索", and every "2 days ago" into "2日前". Translations include proper plural forms for languages that need them (like Polish, which has three plural forms depending on the number) and localized date expressions.
+That single line transforms every "Next page" into "Page suivante", every "Search" into "Rechercher", and every "2 days ago" into "il y a 2 jours". Translations include proper plural forms for languages that need them (like Polish, which has three plural forms depending on the number) and localized date expressions.
 
-The reasoning behind this feature is straightforward: if your package has international users (and most packages do, whether they realize it or not), the friction of navigating a site where every label is in a language you do not speak fluently is real. Translating content is a large undertaking; translating UI chrome is something a tool can do for you.
+The reasoning behind this feature is straightforward: if your package has international users (and most packages do, whether they realize it or not), the friction of navigating a site where every label is in a language you do not speak fluently is real. While translating content is a large undertaking, translating UI chrome is something a tool can do for you.
 
-![A reference page for a class called TraiteurDeDonnees with all UI elements rendered in French.](assets/reference-page-french.png)
+![A reference page for a class called `TraiteurDeDonnees` with all UI elements rendered in French.](assets/reference-page-french.png)
 
 ## 5. Keyboard Navigation
 
