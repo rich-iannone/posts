@@ -165,7 +165,7 @@ The [`ruamel.yaml`](https://github.com/ruamel/yaml) library, maintained by Antho
 
 [StrictYAML](https://github.com/crdoconnor/strictyaml) takes a different approach entirely, implementing a deliberate subset of YAML with all implicit typing removed, no tags, no anchors, and no flow style.[^13] Philosophically it is closer to TOML than to full YAML: a safe, simple format that happens to use YAML's indentation syntax. It is Python-only, has no implementations in other languages, and does not aim for spec compliance.
 
-What has been missing from this landscape is a library that is fast, fully 1.2-compliant, and simple enough to use as a drop-in replacement for basic configuration work.
+What has been missing from this landscape is a library that is fast, fully 1.2-compliant, and simple enough to use as a drop-in replacement for PyYAML's basic interface.
 
 ## Introducing py-yaml12
 
@@ -291,7 +291,7 @@ In the meantime, you can `pip install py-yaml12` and see what a modern, spec-com
 
 [^2]: Douglas Crockford, "[The JSON Saga](https://www.youtube.com/watch?v=-C-JoyNuQJs)", presentation at Yahoo, 2011.
 
-[^3]: Douglas Crockford explains in the same presentation (see [^2]), explains that comments were removed because "people were using comments to hold parsing directives".
+[^3]: Douglas Crockford, in the same presentation (see [^2]), explains that comments were removed because "people were using comments to hold parsing directives".
 
 [^4]: Tom Preston-Werner, "[TOML: Tom's Obvious Minimal Language](https://toml.io/en/)".
 
