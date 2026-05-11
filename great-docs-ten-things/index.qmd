@@ -8,7 +8,7 @@ people:
   - Rich Iannone
 date: '2026-05-15'
 image: assets/great-docs-ten-things.png
-image-alt: The Great Docs logo with the number ten
+image-alt: The Great Docs logo with the version number range
 software:
   - great-docs
 languages:
