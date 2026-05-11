@@ -30,7 +30,7 @@ With the release of `v0.10.0`, we have reached a nice, round number and it's wor
 
 The original release (`v0.1`) came out with the feature that defines the project's philosophy. When you run `great-docs init`, Great Docs inspects your package and discovers its public API automatically. It finds classes, functions, dataclasses, protocols, enumerations, exceptions, type aliases, and more, using a combination of runtime introspection and static analysis via [griffe](https://mkdocstrings.github.io/griffe/). It detects your docstring style (NumPy, Google, or Sphinx) and writes a `great-docs.yml` configuration file that captures the full structure of your API.
 
-```{.yaml filename="great-docs.yml (generated)"}
+```yaml
 reference:
   sections:
     - title: Core
@@ -51,7 +51,7 @@ The `v0.2` release added two capabilities that address different aspects of the 
 
 On the discoverability side, Great Docs now generates `sitemap.xml`, `robots.txt`, canonical URLs, and JSON-LD structured data automatically. Per-page Open Graph meta tags are injected so that when someone shares a link to your documentation, the preview card shows a title, description, and image rather than a generic URL. The `great-docs seo` audit command checks your site for common problems (e.g., missing descriptions, broken canonical links, orphaned pages, etc.).
 
-```{.bash filename="Terminal"}
+```bash
 great-docs proofread
 ```
 
@@ -63,7 +63,7 @@ The combination means that documentation sites built with Great Docs tend to sur
 
 Release `v0.3` introduced `great-docs lint`, a static analysis tool for your documentation rather than your code. It inspects your package's public API and checks for problems that would otherwise surface only when a user encounters a confusing or broken page.
 
-```{.bash filename="Terminal"}
+```bash
 great-docs lint
 ```
 
@@ -75,7 +75,7 @@ This sort of feature is more useful than you'd expect. You might run it, discove
 
 Great Docs `v0.4` made it possible to present your entire documentation site in any of 23 languages with a single configuration option. The actual content of your pages remains in whatever language you write it in (usually English), but every piece of UI text (navbar labels, button tooltips, relative timestamps, search placeholders, accessibility attributes, pagination controls) is automatically translated.
 
-```{.yaml filename="great-docs.yml"}
+```yaml
 site:
   language: fr
 ```
@@ -102,7 +102,7 @@ Release `v0.6` introduced page-level metadata that surfaces in both the page bod
 
 Page tags let you categorize pages by topic using YAML frontmatter:
 
-```{.yaml filename="page frontmatter"}
+```yaml
 tags: [Configuration, Theming, Advanced]
 ```
 
@@ -112,7 +112,7 @@ Great Docs renders these as pill-shaped links above the page title and auto-gene
 
 Page status badges mark pages with lifecycle states:
 
-```{.yaml filename="page frontmatter"}
+```yaml
 status: beta
 ```
 
@@ -128,7 +128,7 @@ Great Docs `v0.7` introduced a solution to a problem that plagues documentation 
 
 Scale-to-Fit handles both cases. It automatically shrinks targeted elements so they fit within the container width, and falls back to horizontal scrolling when the element would need to shrink beyond a configurable minimum threshold. The default threshold is 60% of natural size, meaning content will shrink up to 40% to avoid scrollbars, but anything more extreme gets a scrollbar instead.
 
-```{.yaml filename="great-docs.yml"}
+```yaml
 scale_to_fit: true
 scale_to_fit_min_scale: 0.6
 ```
@@ -139,7 +139,7 @@ The feature can be enabled globally (all rendered HTML output gets the treatment
 
 Release `v0.8` addressed a fundamental challenge of maintaining documentation for evolving libraries: users on older releases need docs that match the version they have installed. Great Docs makes multi-version documentation a build-time concern rather than a deployment concern. You declare your versions in configuration, and the build system produces a coherent, version-aware site.
 
-```{.yaml filename="great-docs.yml"}
+```yaml
 versions:
   - "0.3"
   - "0.2"
@@ -168,7 +168,7 @@ The most recent release, `v0.10.0`, added two complementary tools for embedding 
 
 `tbl_preview()` generates a self-contained, JavaScript-free HTML table from almost any data source:
 
-```{.python filename="Python"}
+```python
 from great_docs import tbl_preview
 
 tbl_preview("data/example.parquet")
@@ -192,7 +192,7 @@ The guiding principle remains the same as it was in `v0.1`: you should be able t
 
 Great Docs is [available on PyPI](https://pypi.org/project/great-docs/) so if you maintain a Python package and want to try it:
 
-```{.bash filename="Terminal"}
+```bash
 pip install great-docs
 cd your-python-project
 great-docs init
