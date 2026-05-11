@@ -1,6 +1,4 @@
 ---
-categories:
-- Open Source
 date: 2026-05-15
 description: |
   Great Docs reached its tenth release with v0.10.0. Here we look back
@@ -14,9 +12,7 @@ image-alt: The Great Docs logo with the number ten
 languages:
 - Python
 people:
-- Richard Iannone
-ported_categories:
-- Python Packages
+- Rich Iannone
 software:
 - great-docs
 tags:
@@ -25,6 +21,9 @@ tags:
 - Python Packages
 title: Ten Great Things We Added to Great Docs
 toc-title: Table of contents
+topics:
+- Publishing
+- Best Practices
 ---
 
 Great Docs started with a premise: you should be able to point a tool at
