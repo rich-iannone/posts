@@ -1,29 +1,25 @@
 ---
-date: 2026-05-15
-description: |
-  Great Docs reached its tenth release with v0.10.0. Here we look back
-  at ten features that transformed it from a simple documentation
-  generator into a comprehensive platform for Python package
-  documentation.
-engines:
-- path: /Applications/quarto/share/extension-subtrees/julia-engine/\_extensions/julia-engine/julia-engine.js
+title: "Ten Great Things We Added to Great Docs"
+description: >
+  Great Docs reached its tenth release with v0.10.0. Here we look back at
+  ten features that transformed it from a simple documentation generator
+  into a comprehensive platform for Python package documentation.
+people:
+  - Rich Iannone
+date: '2026-05-15'
 image: assets/great-docs-ten-things.png
 image-alt: The Great Docs logo with the version number range
-languages:
-- Python
-people:
-- Rich Iannone
 software:
-- great-docs
-tags:
-- Great Docs
-- Documentation
-- Python Packages
-title: Ten Great Things We Added to Great Docs
-toc-title: Table of contents
+  - great-docs
+languages:
+  - Python
 topics:
-- Publishing
-- Best Practices
+  - Publishing
+  - Best Practices
+tags:
+  - Great Docs
+  - Documentation
+  - Python Packages
 ---
 
 Great Docs started with a premise: you should be able to point a tool at
@@ -416,9 +412,9 @@ themes.](assets/tbl-preview-light-dark.png)
 `tbl_explorer()` is the interactive counterpart. It embeds all data as
 inline JSON and progressively enhances a static fallback table with
 sorting, token-based filtering, pagination, column toggling,
-copy-to-clipboard, and CSV download. A shortcode variant
-(`{{< tbl-explorer >}}`) lets you embed an explorer directly in a `.qmd`
-page by pointing at a data file, without writing any Python.
+copy-to-clipboard, and CSV download. A Quarto shortcode variant lets you
+embed an explorer directly in a `.qmd` page by pointing at a data file,
+without writing any Python.
 
 ![A Table Explorer widget with three active filters and two column sorts
 applied, showing how readers can interactively narrow and reorder
