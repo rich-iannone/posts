@@ -8,7 +8,7 @@ description: |
 engines:
 - path: /Applications/quarto/share/extension-subtrees/julia-engine/\_extensions/julia-engine/julia-engine.js
 image: assets/great-docs-ten-things.png
-image-alt: The Great Docs logo with the number ten
+image-alt: The Great Docs logo with the version number range
 languages:
 - Python
 people:
