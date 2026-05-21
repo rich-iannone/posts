@@ -1,26 +1,23 @@
 ---
-categories:
-- Open Source
-date: 2026-05-05
-description: |
+title: "In Defense of YAML"
+description: >
   A common refrain among developers: YAML is bad and TOML is good. This
   post argues otherwise, tracing the history of configuration formats,
   examining what YAML 1.2 actually fixed, and introducing py-yaml12, a
   new Rust-backed Python library for working with the modern spec.
+people:
+  - Rich Iannone
+date: '2026-05-05'
 image: assets/yaml.png
 image-alt: The YAML logo
-languages:
-- Python
-people:
-- Richard Iannone
-ported_categories:
-- Python Packages
 software:
-- py-yaml12
+  - py-yaml12
+languages:
+  - Python
+topics:
+  - Best Practices
 tags:
-- YAML
-title: In Defense of YAML
-toc-title: Table of contents
+  - YAML
 ---
 
 Every programmer has opinions about configuration files. These opinions
@@ -51,7 +48,7 @@ could not nest deeper than one level, and there was no formal
 specification, which meant every parser implemented its own dialect. But
 for two decades, this was fine.
 
-``` ini
+```ini
 [boot]
 shell=COMMAND.COM
 device=HIMEM.SYS
@@ -71,7 +68,7 @@ nested elements just to change a database connection string. The
 verbosity made the files difficult to maintain by hand, which is
 precisely what configuration files demand.
 
-``` xml
+```xml
 <web-app>
   <servlet>
     <servlet-name>myServlet</servlet-name>
@@ -123,7 +120,7 @@ scalar `NO` was interpreted as the boolean value `false`. This meant
 that a list of country codes would silently transform Norway into a
 falsehood:
 
-``` yaml
+```yaml
 # What you wrote:
 countries:
   - dk
@@ -131,18 +128,37 @@ countries:
   - is
   - no
   - se
+```
 
+```python
 # What YAML 1.1 parsed:
-# ["dk", "fi", "is", false, "se"]
+["dk", "fi", "is", false, "se"]
 ```
 
 The same applied to `yes`, `on`, `off`, `y`, `n`, and various
 capitalizations thereof. Ruud van Asseldonk's widely-circulated "YAML
 Document from Hell"[^5] catalogued these and other problems: port
 mappings like `22:22` parsed as sexagesimal (base-60) integers, version
-numbers like `10.23` parsed as floats rather than strings, and tags
-beginning with `!` could trigger arbitrary code execution in some
-parsers.
+numbers like `10.23` parsed as floats rather than strings, date-like
+values parsed as timestamps,[^6] and tags beginning with `!` could
+trigger arbitrary code execution in some parsers.
+
+This is not only a country-code problem. In data science and machine
+learning code, `n` and `y` are natural variable names:
+
+```yaml
+variables:
+  x: features
+  n: sample_size
+  y: target
+```
+
+Under YAML 1.1's implicit boolean rules, a parser can resolve those keys
+as booleans instead of strings:
+
+```python
+{"variables": {"x": "features", False: "sample_size", True: "target"}}
+```
 
 These were not edge cases encountered only by the reckless. They emerged
 from the YAML 1.1 specification's design philosophy of aggressive
@@ -156,12 +172,12 @@ silent misparse can propagate through a system undetected for months.
 
 The complexity of the full specification compounded the problem. The
 YAML 1.2.2 spec runs to ten chapters with sections numbered four levels
-deep.[^6] There are dozens of ways to express multiline strings. Anchors
+deep.[^7] There are dozens of ways to express multiline strings. Anchors
 and aliases create a reference system that, while powerful, adds
 conceptual weight far beyond what most configuration tasks require. And
 the security implications of tag-based object deserialization (the
 `yaml.load()` vulnerability in Python) became a well-known attack
-vector.[^7] All of these criticisms were valid, and they were valid
+vector.[^8] All of these criticisms were valid, and they were valid
 specifically of YAML 1.1 and the tooling ecosystem built around it.
 
 ## What TOML gets right
@@ -179,7 +195,7 @@ no ambiguity about whether `no` is a boolean or the word "no". Integers
 are integers, floats are floats, and dates are first-class types.
 Comments work exactly as you would expect. For this class of problem,
 TOML works well, and its adoption by the Python packaging ecosystem (PEP
-518)[^8] and the Rust community (Cargo) makes sense.
+518)[^9] and the Rust community (Cargo) makes sense.
 
 TOML also benefits from simplicity of implementation. The specification
 is short enough that a competent programmer can write a compliant parser
@@ -200,12 +216,12 @@ whether his library should become a dependency for pip, he declined and
 explained: "TOML is a bad file format. It looks good at first glance,
 and for really really trivial things it is probably good. But once I
 started using it and the configuration schema became more complex, I
-found the syntax ugly and hard to read".[^9]
+found the syntax ugly and hard to read".[^10]
 
 Consider a moderately complex configuration. In YAML, the indentation
 communicates the hierarchy at a glance:
 
-``` yaml
+```yaml
 services:
   web:
     image: nginx:latest
@@ -221,7 +237,7 @@ services:
 The equivalent in TOML requires repeating the full path in each section
 header:
 
-``` toml
+```toml
 [services.web]
 image = "nginx:latest"
 
@@ -237,7 +253,7 @@ cpu = "0.5"
 The reader must mentally reconstruct the tree from a flat sequence of
 qualified names. The StrictYAML documentation measured this concretely:
 equivalent TOML files use approximately 50% more characters to represent
-the same data, largely because of the repeated path prefixes.[^10]
+the same data, largely because of the repeated path prefixes.[^11]
 
 There is also the matter of meaningful indentation itself. Python
 demonstrated decades ago that indentation as structure is not a weakness
@@ -252,15 +268,17 @@ makes TOML files harder to scan and harder to edit confidently.
 ## What YAML 1.2 changed
 
 The YAML 1.2 specification was published in 2009, with a clarifying
-revision (1.2.2) completed in October 2021.[^11] Its changes address the
+revision (1.2.2) completed in October 2021.[^12] Its changes address the
 complaints described above directly.
 
 The implicit typing that created the Norway problem is gone. In the YAML
 1.2 Core Schema, only `true` and `false` (and their capitalizations
 `True`, `False`, `TRUE`, `FALSE`) are recognized as booleans. The words
 `yes`, `no`, `on`, `off`, `y`, and `n` are plain strings. Sexagesimal
-number literals (the `22:22` problem) are removed entirely. JSON is now
-a strict, proper subset of YAML 1.2, which means any valid JSON document
+number literals (the `22:22` problem) are removed entirely. Timestamp is
+no longer a core type, so an unquoted `2026-05-05` is a string under the
+core schema rather than an automatically detected date. JSON is now a
+strict, proper subset of YAML 1.2, which means any valid JSON document
 parses identically as YAML. The tag resolution rules are tightened and
 clarified. The specification itself, while still substantial, is written
 more clearly and maintained openly on GitHub.
@@ -282,13 +300,13 @@ packages, and it implements YAML 1.1. This last fact is the root of most
 YAML complaints in the Python ecosystem. When someone says "YAML parsed
 my country code as a boolean", they are describing PyYAML's behavior,
 not YAML's specification. PyYAML's GitHub repository shows over 200 open
-issues and 100 open pull requests.[^12] The project is maintained but
+issues and 100 open pull requests.[^13] The project is maintained but
 moves slowly, and a major version bump to YAML 1.2 semantics has not
 materialized.
 
 The [`ruamel.yaml`](https://github.com/ruamel/yaml) library, maintained
 by Anthon van der Neut, offers YAML 1.2 support with round-trip
-preservation of comments, flow style, and key order.[^13] It is widely
+preservation of comments, flow style, and key order.[^14] It is widely
 used and is significantly more capable than PyYAML for tasks requiring
 comment preservation or format-aware editing. However, it is primarily a
 pure-Python implementation in its default round-trip mode, which makes
@@ -298,7 +316,7 @@ dependency chain that has occasionally confused deployment pipelines.
 
 [StrictYAML](https://github.com/crdoconnor/strictyaml) takes a different
 approach entirely, implementing a deliberate subset of YAML with all
-implicit typing removed, no tags, no anchors, and no flow style.[^14]
+implicit typing removed, no tags, no anchors, and no flow style.[^15]
 Philosophically it is closer to TOML than to full YAML: a safe, simple
 format that happens to use YAML's indentation syntax. It is Python-only,
 has no implementations in other languages, and does not aim for spec
@@ -312,23 +330,25 @@ for PyYAML's basic interface.
 
 The [`py-yaml12`](https://github.com/posit-dev/py-yaml12) library is a
 YAML 1.2 parser and formatter for Python, implemented in Rust for speed
-and correctness. It is built on the `saphyr` crate[^15] (a Rust YAML
+and correctness. It is built on the `saphyr` crate[^16] (a Rust YAML
 library) and exposes a minimal, focused API: `parse_yaml()` and
 `read_yaml()` for loading, `format_yaml()` and `write_yaml()` for
 serialization.
+
+### Simple
 
 The design philosophy is straightforward. For the vast majority of use
 cases, you work with plain Python builtins end to end: `dict`, `list`,
 `int`, `float`, `str`, and `None`. There is no special document class,
 no custom node types in the common path. Because YAML 1.2 is a superset
 of JSON, all valid JSON parses identically. The library achieves 100%
-compliance with the yaml-test-suite,[^16] the community-maintained
+compliance with the yaml-test-suite,[^17] the community-maintained
 corpus of edge cases and conformance tests.
 
 :::: {.cell execution_count="1"}
 ``` {.python .cell-code}
 from yaml12 import parse_yaml, format_yaml
-from pprint import pprint
+from rich.pretty import pprint
 
 config = """
 server:
@@ -339,21 +359,24 @@ server:
 database:
   url: postgres://localhost/mydb
   pool_size: 5
-  
+
 regions:
   - us-east-1
   - eu-west-1
   - no         # Norway, not false
 """
 
-doc = parse_yaml(config)
-pprint(doc)
+data = parse_yaml(config)
+pprint(data)
 ```
 
-::: {.cell-output .cell-output-stdout}
-    {'database': {'pool_size': 5, 'url': 'postgres://localhost/mydb'},
-     'regions': ['us-east-1', 'eu-west-1', 'no'],
-     'server': {'debug': False, 'host': '0.0.0.0', 'port': 8080}}
+::: {.cell-output .cell-output-display}
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">{</span>
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'server'</span>: <span style="font-weight: bold">{</span><span style="color: #008000; text-decoration-color: #008000">'host'</span>: <span style="color: #008000; text-decoration-color: #008000">'0.0.0.0'</span>, <span style="color: #008000; text-decoration-color: #008000">'port'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">8080</span>, <span style="color: #008000; text-decoration-color: #008000">'debug'</span>: <span style="color: #ff0000; text-decoration-color: #ff0000; font-style: italic">False</span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'database'</span>: <span style="font-weight: bold">{</span><span style="color: #008000; text-decoration-color: #008000">'url'</span>: <span style="color: #008000; text-decoration-color: #008000">'postgres://localhost/mydb'</span>, <span style="color: #008000; text-decoration-color: #008000">'pool_size'</span>: <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">5</span><span style="font-weight: bold">}</span>,
+<span style="color: #7fbf7f; text-decoration-color: #7fbf7f">│   </span><span style="color: #008000; text-decoration-color: #008000">'regions'</span>: <span style="font-weight: bold">[</span><span style="color: #008000; text-decoration-color: #008000">'us-east-1'</span>, <span style="color: #008000; text-decoration-color: #008000">'eu-west-1'</span>, <span style="color: #008000; text-decoration-color: #008000">'no'</span><span style="font-weight: bold">]</span>
+<span style="font-weight: bold">}</span>
+</pre>
 :::
 ::::
 
@@ -363,46 +386,16 @@ silently become `False`. Under `py-yaml12` (YAML 1.2), it is the string
 encapsulates the entire argument: the format is not broken, the old
 tooling was.
 
-For advanced YAML features (tagged values, complex mapping keys,
-multi-document streams), `py-yaml12` provides the `Yaml` wrapper type,
-but these are opt-in and unnecessary for typical configuration work:
+The file API is similarly direct:
 
-:::: {.cell execution_count="2"}
+::: {.cell execution_count="2"}
 ``` {.python .cell-code}
-from yaml12 import read_yaml, write_yaml, format_yaml
-import tempfile
-import os
+from yaml12 import write_yaml, read_yaml
 
-data = {
-    "project": "my-app",
-    "version": "1.0.0",
-    "features": ["auth", "logging", "metrics"],
-    "settings": {
-        "timeout": 30,
-        "retries": 3,
-        "verbose": True,
-    },
-}
-
-path = os.path.join(tempfile.gettempdir(), "config.yaml")
+path = "config.yaml"
 write_yaml(data, path)
-
-print(format_yaml(data))
 ```
-
-::: {.cell-output .cell-output-stdout}
-    project: my-app
-    version: 1.0.0
-    features:
-      - auth
-      - logging
-      - metrics
-    settings:
-      timeout: 30
-      retries: 3
-      verbose: true
 :::
-::::
 
 The round-trip is lossless. Writing a Python dictionary to disk and
 reading it back produces an identical object:
@@ -420,8 +413,87 @@ print(f"Round-trip matches: {round_tripped == data}")
 :::
 ::::
 
+For advanced YAML features like tagged values, `py-yaml12` provides the
+`Yaml` wrapper type. It is opt-in and unnecessary for typical
+configuration work.
+
+### Safe
+
+The defaults in `py-yaml12` are not just about ergonomics and
+simplicity; they also improve safety. PyYAML shows the risk of the
+opposite approach: treating tags as instructions can execute arbitrary
+Python code simply by reading a YAML file.[^18]
+
+For example, someone can produce a YAML file that aliases PyYAML's
+Python object-apply tag namespace:
+
+::: {.cell execution_count="4"}
+``` {.python .cell-code}
+dangerous_yaml = """\
+%TAG !py! tag:yaml.org,2002:python/object/apply:
+--- !py!builtins.eval
+- "(__import__('os').environ.__setitem__('YAML_PAYLOAD_RAN', '1'), {'debug': False, 'retries': 3})[1]"
+"""
+
+with open("dangerous.yaml", "w") as f:
+    f.write(dangerous_yaml)
+```
+:::
+
+Then a user expecting only to load a config file runs that code during
+parsing:
+
+:::: {.cell execution_count="5"}
+``` {.python .cell-code}
+import yaml
+
+with open("dangerous.yaml") as f:
+    data = yaml.load(f, Loader=yaml.Loader)
+
+print(data)
+```
+
+::: {.cell-output .cell-output-stdout}
+    {'debug': False, 'retries': 3}
+:::
+::::
+
+The `yaml.load()` call looks like ordinary data loading: it returns an
+ordinary dictionary. But producing that dictionary executed Python code
+first. Unless you inspect the YAML itself, nothing in the result tells
+you that happened.
+
+:::: {.cell execution_count="6"}
+``` {.python .cell-code}
+import os
+
+os.environ["YAML_PAYLOAD_RAN"]
+```
+
+::: {.cell-output .cell-output-display execution_count="14"}
+    '1'
+:::
+::::
+
+In contrast, `py-yaml12` keeps an unhandled tag as data unless you
+explicitly opt in:
+
+:::: {.cell execution_count="7"}
+``` {.python .cell-code}
+from yaml12 import read_yaml
+
+read_yaml("dangerous.yaml")
+```
+
+::: {.cell-output .cell-output-display execution_count="15"}
+    Yaml(value=["(__import__('os').environ.__setitem__('YAML_PAYLOAD_RAN', '1'), {'debug': False, 'retries': 3})[1]"], tag='tag:yaml.org,2002:python/object/apply:builtins.eval')
+:::
+::::
+
+### Fast
+
 Performance is a practical concern for any library that might be called
-in startup paths or CI pipelines. The `py-yaml12` benchmarks[^17]
+in startup paths or CI pipelines. The `py-yaml12` benchmarks[^19]
 compare read and write performance against PyYAML (both its default
 pure-Python path and the fast CSafeLoader/CSafeDumper backed by LibYAML)
 and `ruamel.yaml`, across file sizes ranging from kilobytes to
@@ -473,40 +545,52 @@ spec-compliant YAML experience looks like in Python.
     hell](https://ruudvanasseldonk.com/2023/01/11/the-yaml-document-from-hell)",
     January 2023.
 
-[^6]: "[YAML Ain't Markup Language (YAML) Version 1.2, Revision
+[^6]: Examples include Stack Overflow, "[Skip converting entities while
+    loading a yaml string (using
+    PyYAML)](https://stackoverflow.com/questions/50900727/skip-converting-entities-while-loading-a-yaml-string-using-pyyaml)";
+    PyYAML issue [#382](https://github.com/yaml/pyyaml/issues/382); and
+    ruamel.yaml ticket
+    [#509](https://sourceforge.net/p/ruamel-yaml/tickets/509/).
+
+[^7]: "[YAML Ain't Markup Language (YAML) Version 1.2, Revision
     1.2.2](https://yaml.org/spec/1.2.2/)", October 2021.
 
-[^7]: "[CVE-2017-18342](https://nvd.nist.gov/vuln/detail/CVE-2017-18342)",
-    National Vulnerability Database. CVSS 9.8 Critical: arbitrary code
-    execution via `yaml.load()` with untrusted data in PyYAML before
-    5.1. See also PyYAML wiki, "[PyYAML yaml.load(input)
-    Deprecation](https://github.com/yaml/pyyaml/wiki/PyYAML-yaml.load(input)-Deprecation)".
+[^8]: See
+    [CVE-2017-18342](https://nvd.nist.gov/vuln/detail/CVE-2017-18342),
+    [CVE-2020-1747](https://nvd.nist.gov/vuln/detail/CVE-2020-1747),
+    [CVE-2020-14343](https://nvd.nist.gov/vuln/detail/CVE-2020-14343),
+    PyYAML issue [#420](https://github.com/yaml/pyyaml/issues/420), and
+    the PyYAML wiki page on [`yaml.load(input)`
+    deprecation](https://github.com/yaml/pyyaml/wiki/PyYAML-yaml.load(input)-Deprecation).
 
-[^8]: Brett Cannon et al., "[PEP 518 -- Specifying Minimum Build System
+[^9]: Brett Cannon et al., "[PEP 518 -- Specifying Minimum Build System
     Requirements for Python
     Projects](https://peps.python.org/pep-0518/)", 2016.
 
-[^9]: Martin Vejnár (avakar), comment on
+[^10]: Martin Vejnár (avakar), comment on
     [avakar/pytoml#15](https://github.com/avakar/pytoml/issues/15#issuecomment-217804599),
     May 2016.
 
-[^10]: StrictYAML documentation, "[What is wrong with
+[^11]: StrictYAML documentation, "[What is wrong with
     TOML?](https://hitchdev.com/strictyaml/why-not/toml/)".
 
-[^11]: "[YAML Ain't Markup Language (YAML) Version 1.2, Revision
+[^12]: "[YAML Ain't Markup Language (YAML) Version 1.2, Revision
     1.2.2](https://yaml.org/spec/1.2.2/)", October 2021.
 
-[^12]: [PyYAML GitHub repository](https://github.com/yaml/pyyaml),
+[^13]: [PyYAML GitHub repository](https://github.com/yaml/pyyaml),
     accessed April 2026.
 
-[^13]: [ruamel.yaml on PyPI](https://pypi.org/project/ruamel.yaml/).
+[^14]: [ruamel.yaml on PyPI](https://pypi.org/project/ruamel.yaml/).
 
-[^14]: [StrictYAML documentation](https://hitchdev.com/strictyaml/).
+[^15]: [StrictYAML documentation](https://hitchdev.com/strictyaml/).
 
-[^15]: [saphyr crate](https://crates.io/crates/saphyr) on crates.io.
+[^16]: [saphyr crate](https://crates.io/crates/saphyr) on crates.io.
 
-[^16]: [yaml-test-suite](https://github.com/yaml/yaml-test-suite) on
+[^17]: [yaml-test-suite](https://github.com/yaml/yaml-test-suite) on
     GitHub.
 
-[^17]: py-yaml12,
+[^18]: See the PyYAML object-construction examples in issue #420, cited
+    above.
+
+[^19]: py-yaml12,
     "[Benchmarks](https://posit-dev.github.io/py-yaml12/benchmarks/benchmarks.html)".
