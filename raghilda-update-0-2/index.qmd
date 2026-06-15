@@ -63,6 +63,10 @@ summary = store.ingest(
 print(summary)
 ```
 
+```
+IngestSummary(inserted=142, replaced=0, skipped=0)
+```
+
 The `CrawlScope` dataclass defines the traversal policy: root URLs, include/exclude patterns, depth limits, and page count caps. The crawler handles the mechanics of fetching and converting pages to Markdown, while the scope tells it where to go. This separation means you can change the backend (swap `WebCrawler` for `CloudflareCrawler`, for instance) without redefining the scope, and vice versa.
 
 Three concrete crawlers ship with `v0.2`. `DirectoryCrawler` walks local file trees and converts supported formats to Markdown. `WebCrawler` fetches pages over HTTP using `requests` and converts them locally. `CloudflareCrawler` delegates both fetching and rendering to Cloudflare's Browser Rendering API (the right tool for sites that load content through JavaScript). All three implement the same interface: `origins()` to discover pages, `fetch_raw()` and `fetch_markdown()` for single-page access, and `markdown_documents()` for the full pipeline.
