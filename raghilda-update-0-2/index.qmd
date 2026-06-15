@@ -133,6 +133,8 @@ The store supports full-text search via PostgreSQL's native `tsvector`/`tsquery`
 
 Attributes work as expected: scalar types map to columns, struct types map to JSONB, and attribute filters can query into JSONB fields using the `->>` operator. The `build_index()` method creates HNSW indexes after ingestion, and the `vss_index=` parameter on `create()` controls the default index type.
 
+Connection strings are accepted directly in `create()` and `connect()`, so you can point the store at any PostgreSQL instance with pgvector installed. If the pgvector extension is missing, the store raises an informative error rather than failing cryptically on the first vector operation.
+
 ## NVIDIA NIM embeddings
 
 The embedding layer gains a new provider: `EmbeddingNVIDIA`, which connects to NVIDIA's OpenAI-compatible embedding API. The default model is `nvidia/llama-nemotron-embed-1b-v2`, a compact embedding model suitable for retrieval workloads. The provider reads its API key from the `NVIDIA_API_KEY` environment variable.
