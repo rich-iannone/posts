@@ -122,3 +122,5 @@ crawler = CloudflareCrawler(
 )
 ```
 
+The tradeoff is cost: `CloudflareCrawler` requires a Cloudflare account with Browser Rendering access. For static HTML sites where a plain HTTP fetch returns the full content, `WebCrawler` remains the simpler and free option. Both crawlers share the same interface, so switching between them requires only a constructor change.
+
