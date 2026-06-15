@@ -33,6 +33,11 @@ The largest change in `v0.2` is a new API for crawling sources and ingesting the
 The new API introduces a clean separation between crawling and storage. On the crawl side, a crawler object produces `MarkdownDocument` objects from a defined scope. On the store side, `store.ingest()` consumes those documents lazily, applies an optional preparation step (typically chunking), and writes them to the store with configurable parallelism. The pipeline looks like this:
 
 ```python
+from raghilda.chunker import MarkdownChunker
+from raghilda.crawl import CrawlScope, WebCrawler
+from raghilda.embedding import EmbeddingOpenAI
+from raghilda.store import DuckDBStore
+
 crawler = WebCrawler(cache_dir=".cache/crawl", max_workers=4)
 
 scope = CrawlScope(
