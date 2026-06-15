@@ -128,6 +128,17 @@ The tradeoff is cost: `CloudflareCrawler` requires a Cloudflare account with Bro
 
 raghilda `v0.1` shipped with three store backends: DuckDB (local, zero-config), ChromaDB, and OpenAI Vector Stores. `v0.2` adds `PostgreSQLStore`, backed by `psycopg2` and `pgvector`. This is the natural choice for production deployments where the store needs to be shared across services, or where you already have PostgreSQL infrastructure.
 
+```python
+from raghilda.store import PostgreSQLStore
+from raghilda.embedding import EmbeddingOpenAI
+
+store = PostgreSQLStore.create(
+    connection="postgresql://user:pass@localhost:5432/mydb",
+    embed=EmbeddingOpenAI(),
+    name="docs_store",
+    overwrite=True,
+)
+```
 
 The store supports full-text search via PostgreSQL's native `tsvector`/`tsquery` with a pre-computed column and GIN index, vector similarity search via pgvector with HNSW indexes (supporting cosine, L2, and inner product distance metrics), and combined retrieval that merges both result sets with deoverlap support.
 
