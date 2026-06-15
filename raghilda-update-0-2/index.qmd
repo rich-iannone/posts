@@ -22,3 +22,7 @@ tags:
   - Python Packages
 ---
 
+When we [introduced raghilda](https://opensource.posit.co/blog/2026-04-14_rag-with-raghilda/) in April, the package handled the core RAG workflow: read documents, chunk them, embed them into a store, and retrieve relevant chunks at query time. raghilda `v0.2` broadens that scope considerably. The release adds a structured crawl and ingest API that replaces the manual read-and-upsert loop with a pipeline built around caching, concurrency, and composable crawlers (including a `CloudflareCrawler` that can index JavaScript-rendered sites without running a local headless browser). It also ships a PostgreSQL store backend and NVIDIA NIM embedding support.
+
+This post walks through the major additions. The package's fundamentals have not changed (stores, chunkers, retrievers, and the pattern for connecting to chatlas all work as before), but the surface area for building and maintaining stores in production has grown substantially.
+
