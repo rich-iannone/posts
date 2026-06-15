@@ -128,6 +128,12 @@ The tradeoff is cost: `CloudflareCrawler` requires a Cloudflare account with Bro
 
 The embedding layer gains a new provider: `EmbeddingNVIDIA`, which connects to NVIDIA's OpenAI-compatible embedding API. The default model is `nvidia/llama-nemotron-embed-1b-v2`, a compact embedding model suitable for retrieval workloads. The provider reads its API key from the `NVIDIA_API_KEY` environment variable.
 
+```python
+from raghilda.embedding import EmbeddingNVIDIA
+
+embedding = EmbeddingNVIDIA()
+```
+
 One notable feature of NVIDIA's embedding API is differentiated input types: queries and documents are embedded with different prefixes (`"query"` and `"passage"`), which can improve retrieval quality for asymmetric search where the query is short and the documents are long. raghilda handles this distinction automatically when the store calls the embedding provider during ingestion and retrieval.
 
 The provider includes built-in rate limit handling with exponential backoff. NVIDIA's 429 responses carry no `Retry-After` header or rate limit metadata, so backoff is the only viable strategy. For users who want to keep embedding computation entirely local, NVIDIA NIM can also be self-hosted, in which case you point the provider at your local endpoint with a `base_url=` override.
