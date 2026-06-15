@@ -83,6 +83,7 @@ The usage looks almost identical to `WebCrawler`, because both share the same cr
 
 ```python
 import os
+from raghilda.crawl import CloudflareCrawler, CrawlScope
 
 crawler = CloudflareCrawler(
     account_id=os.environ["CLOUDFLARE_ACCOUNT_ID"],
