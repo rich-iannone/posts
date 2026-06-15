@@ -26,3 +26,9 @@ When we [introduced raghilda](https://opensource.posit.co/blog/2026-04-14_rag-wi
 
 This post walks through the major additions. The package's fundamentals have not changed (stores, chunkers, retrievers, and the pattern for connecting to chatlas all work as before), but the surface area for building and maintaining stores in production has grown substantially.
 
+## The crawl and ingest API
+
+The largest change in `v0.2` is a new API for crawling sources and ingesting them into a store. In `v0.1`, building a store meant calling `read_as_markdown()` on individual URLs, chunking each result, and upserting them one by one. That works for a handful of pages, but it becomes unwieldy for larger collections, where you also want caching (to avoid re-fetching unchanged content) and concurrency (to finish in minutes rather than hours).
+
+The new API introduces a clean separation between crawling and storage. On the crawl side, a crawler object produces `MarkdownDocument` objects from a defined scope. On the store side, `store.ingest()` consumes those documents lazily, applies an optional preparation step (typically chunking), and writes them to the store with configurable parallelism. The pipeline looks like this:
+
