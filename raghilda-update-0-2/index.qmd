@@ -81,3 +81,23 @@ Some websites, particularly those built with React, Vue, or Angular, render thei
 
 The usage looks almost identical to `WebCrawler`, because both share the same crawl interface. The key difference is that the constructor takes Cloudflare credentials instead of an HTTP session, and Cloudflare's infrastructure handles the rendering remotely (so there is no need to install Playwright, Selenium, or any other local headless browser):
 
+```python
+import os
+
+crawler = CloudflareCrawler(
+    account_id=os.environ["CLOUDFLARE_ACCOUNT_ID"],
+    api_token=os.environ["CLOUDFLARE_API_TOKEN"],
+    cache_dir=True,
+    render=True,
+    max_workers=4,
+)
+
+scope = CrawlScope(
+    roots=["https://my-spa-docs.example.com/"],
+    depth=2,
+    include_patterns=["https://my-spa-docs.example.com/**"],
+    limit=500,
+)
+
+documents = crawler.markdown_documents(scope)
+```
