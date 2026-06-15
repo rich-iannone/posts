@@ -159,6 +159,8 @@ Call `store.build_index("bm25")` after inserting or updating documents
 and before calling `retrieve_bm25()` or `retrieve()`.
 ```
 
+The store now tracks BM25 freshness internally: the index is marked stale after any `upsert()` call and marked current after `build_index("bm25")`. This tracking happens off the retrieval hot path, so there is no per-query overhead. HNSW indexes are unaffected because DuckDB maintains them across writes automatically.
+
 ## Getting started
 
 raghilda `v0.2` is available now on PyPI (`pip install raghilda`). The [raghilda documentation site](https://posit-dev.github.io/raghilda/) covers all of the features described here in more detail. The [Getting Started](https://posit-dev.github.io/raghilda/user-guide/getting-started.html) guide walks through building a store from scratch, and the [Crawling and Ingestion](https://posit-dev.github.io/raghilda/user-guide/crawling-and-ingestion.html) guide covers the new crawl API in depth. A dedicated [CloudflareCrawler](https://posit-dev.github.io/raghilda/user-guide/cloudflare-crawler.html) guide explains browser rendering, page discovery, caching, and incremental updates. The [GitHub repository](https://github.com/posit-dev/raghilda) has the source, issue tracker, and full changelog. If you run into problems or have feature requests, open an issue there.
