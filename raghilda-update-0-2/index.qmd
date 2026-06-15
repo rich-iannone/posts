@@ -132,3 +132,13 @@ One notable feature of NVIDIA's embedding API is differentiated input types: que
 
 The provider includes built-in rate limit handling with exponential backoff. NVIDIA's 429 responses carry no `Retry-After` header or rate limit metadata, so backoff is the only viable strategy. For users who want to keep embedding computation entirely local, NVIDIA NIM can also be self-hosted, in which case you point the provider at your local endpoint with a `base_url=` override.
 
+## Improved DuckDB error messages
+
+A smaller but practical improvement: `DuckDBStore` now raises clear, actionable errors when BM25 retrieval is attempted before the index has been built, or after writes have made the index stale. Previously, this produced a cryptic `CatalogException` from DuckDB about a missing `match_bm25` function. The new message tells you exactly what to do:
+
+```
+RuntimeError: DuckDBStore retrieval requires a current BM25 index.
+Call `store.build_index("bm25")` after inserting or updating documents
+and before calling `retrieve_bm25()` or `retrieve()`.
+```
+
