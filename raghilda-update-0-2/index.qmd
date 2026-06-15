@@ -1,0 +1,24 @@
+---
+title: "raghilda `v0.2`: crawl APIs, PostgreSQL, and more"
+description: >
+  raghilda v0.2 introduces a crawl and ingest API with caching and concurrency,
+  a CloudflareCrawler for JavaScript-rendered sites, a PostgreSQL store backend,
+  and NVIDIA NIM embeddings.
+people:
+  - Rich Iannone
+  - Tomasz Kalinowski
+date: '2026-06-18'
+image: assets/raghilda-updated.png
+image-alt: The raghilda logo with the `v0.2` version number
+software:
+  - raghilda
+languages:
+  - Python
+topics:
+  - Artificial Intelligence
+tags:
+  - raghilda
+  - RAG
+  - Python Packages
+---
+
