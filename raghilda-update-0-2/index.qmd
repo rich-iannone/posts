@@ -107,3 +107,18 @@ The `render=True` default tells Cloudflare to execute JavaScript before extracti
 
 For stores that need regular updates, the `modified_since=` parameter restricts the crawl to pages modified after a given Unix timestamp, keeping refresh jobs lightweight. Combined with the crawl cache and the store's own deduplication (identical documents are not re-embedded), an incremental update script can run daily without redundant work:
 
+```python
+import time
+from datetime import timedelta
+
+one_week_ago = int(time.time()) - (7 * 24 * 60 * 60)
+
+crawler = CloudflareCrawler(
+    account_id=os.environ["CLOUDFLARE_ACCOUNT_ID"],
+    api_token=os.environ["CLOUDFLARE_API_TOKEN"],
+    cache_dir=True,
+    cache_stale_after=timedelta(days=1),
+    modified_since=one_week_ago,
+)
+```
+
