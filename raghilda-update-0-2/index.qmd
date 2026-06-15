@@ -75,3 +75,9 @@ Caching is built into the crawler layer. When you pass `cache_dir=True` (or an e
 
 Concurrency operates on both sides of this boundary independently. The crawler can fetch and convert pages in parallel (controlled by `max_workers=` on the crawler constructor), and `store.ingest()` can write to the store concurrently (controlled by its own `max_workers=` argument). For `WebCrawler`, the breadth-first frontier is explored concurrently while preserving stable output order, so results come back in a consistent sequence regardless of which pages respond first.
 
+## `CloudflareCrawler`
+
+Some websites, particularly those built with React, Vue, or Angular, render their content entirely in the browser. A plain HTTP request returns an empty shell. The `CloudflareCrawler` solves this by delegating rendering to Cloudflare's Browser Rendering API, which executes JavaScript, waits for the DOM to stabilize, and returns fully rendered Markdown.
+
+The usage looks almost identical to `WebCrawler`, because both share the same crawl interface. The key difference is that the constructor takes Cloudflare credentials instead of an HTTP session, and Cloudflare's infrastructure handles the rendering remotely (so there is no need to install Playwright, Selenium, or any other local headless browser):
+
