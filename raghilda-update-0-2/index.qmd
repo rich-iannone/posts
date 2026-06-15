@@ -124,3 +124,7 @@ crawler = CloudflareCrawler(
 
 The tradeoff is cost: `CloudflareCrawler` requires a Cloudflare account with Browser Rendering access. For static HTML sites where a plain HTTP fetch returns the full content, `WebCrawler` remains the simpler and free option. Both crawlers share the same interface, so switching between them requires only a constructor change.
 
+## NVIDIA NIM embeddings
+
+The embedding layer gains a new provider: `EmbeddingNVIDIA`, which connects to NVIDIA's OpenAI-compatible embedding API. The default model is `nvidia/llama-nemotron-embed-1b-v2`, a compact embedding model suitable for retrieval workloads. The provider reads its API key from the `NVIDIA_API_KEY` environment variable.
+
