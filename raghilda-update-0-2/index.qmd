@@ -102,3 +102,6 @@ scope = CrawlScope(
 
 documents = crawler.markdown_documents(scope)
 ```
+
+The `render=True` default tells Cloudflare to execute JavaScript before extracting content. For server-rendered sites where JavaScript execution is unnecessary, setting `render=False` reduces crawl time and API usage. The `source=` parameter controls how pages are discovered: `"all"` (the default) combines multiple discovery methods, `"sitemap"` reads from the site's `sitemap.xml`, `"crawl"` follows links from the rendered DOM, and `"urls"` processes only the explicitly provided roots.
+
