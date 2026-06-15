@@ -105,3 +105,5 @@ documents = crawler.markdown_documents(scope)
 
 The `render=True` default tells Cloudflare to execute JavaScript before extracting content. For server-rendered sites where JavaScript execution is unnecessary, setting `render=False` reduces crawl time and API usage. The `source=` parameter controls how pages are discovered: `"all"` (the default) combines multiple discovery methods, `"sitemap"` reads from the site's `sitemap.xml`, `"crawl"` follows links from the rendered DOM, and `"urls"` processes only the explicitly provided roots.
 
+For stores that need regular updates, the `modified_since=` parameter restricts the crawl to pages modified after a given Unix timestamp, keeping refresh jobs lightweight. Combined with the crawl cache and the store's own deduplication (identical documents are not re-embedded), an incremental update script can run daily without redundant work:
+
