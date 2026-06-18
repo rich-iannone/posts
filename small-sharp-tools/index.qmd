@@ -1,0 +1,128 @@
+---
+title: "Small, Sharp Tools: multimark and nokap"
+description: >
+  Two new infrastructural Python libraries from Posit, multimark and nokap,
+  follow in the footsteps of py-yaml12: take a job the whole ecosystem needs
+  done, do it with a fast, correct, dependency-light package. This post looks
+  at each and compares them to what already exists.
+people:
+  - Rich Iannone
+date: '2026-06-19'
+image: assets/small-sharp-tools.png
+image-alt: The multimark and nokap logos side by side
+software:
+  - multimark
+  - nokap
+languages:
+  - Python
+topics:
+  - Best Practices
+tags:
+  - multimark
+  - nokap
+  - Python Packages
+---
+
+Posit has released two small Python libraries: [multimark](https://posit-dev.github.io/multimark/), which renders Markdown, and [nokap](https://posit-dev.github.io/nokap/), which captures web pages as images and PDFs. Both are infrastructure-type packages and are meant to sit near the bottom of a stack (loaded by things above it).
+
+These two libraries follow the approach we took earlier this year with [py-yaml12](https://github.com/posit-dev/py-yaml12), a YAML 1.2 parser and emitter for Python written in Rust. The widely used YAML libraries predated the modern specification and carried its old surprises forward, so py-yaml12 wraps a current Rust implementation behind a small Python interface. multimark and nokap apply the same idea to Markdown rendering and web-page capture. Each wraps a proven engine and exposes a narrow, well-documented surface over it (and neither is a large project).
+
+## Why build these at all?
+
+Several Python packages in the Posit ecosystem produce documents and visual output: [Great Tables](https://posit-dev.github.io/great-tables/) builds display tables, [Great Docs](https://posit-dev.github.io/great-docs/) generates documentation sites, and [Pointblank](https://posit-dev.github.io/pointblank/) reports on data validation. They keep hitting the same two needs. They need to turn Markdown (in a caption, a footnote, a docstring) into HTML or LaTeX, and they need to turn rendered HTML into an image or a PDF for users who want a static artifact rather than a live page. Both needs are common beyond our own packages, and both already have related libraries in the Python ecosystem. The existing libraries seem to tend toward one of two extremes however: (1) a pure-Python implementation that is correct but slow and limited in output, or (2) a heavyweight framework that is capable but large (pulling in browser bundles or external binaries out of proportion to the task).
+
+Neither library was written on a whim. multimark exists because Great Tables needed to turn the Markdown in cell content, captions, and footnotes into LaTeX, and the available routes from Markdown to LaTeX were either missing or disproportionately heavy. One practical option was to pull in something like the MyST parsing toolchain, which is capable but turns out to be a large stack to adopt just to emit LaTeX from a few lines of Markdown. nokap exists because Great Tables needed to save a rendered table as an image or a PDF, and the first version of that feature used Selenium together with Pillow. That approach worked and was a reasonable start, but a full browser-automation framework plus an image library was more than the task required (and the combination proved fragile in practice). In both cases the right component did not yet exist, so we built it. The recently shipped `gtsave()` method in Great Tables now runs on nokap, and its LaTeX output now goes through multimark.
+
+The pattern in each case is the same: a small library that wraps a proven native engine, exposes a clean Python interface over it, and depends on as little as possible. py-yaml12 wraps a Rust YAML implementation. multimark wraps the C reference implementation of CommonMark. nokap speaks the Chrome DevTools Protocol directly over a WebSocket. The heavy lifting is done by code already exercised by large numbers of users in other contexts, and the Python package is a thin, documented layer over it.
+
+## multimark: Markdown rendering over the C reference engine
+
+[multimark](https://posit-dev.github.io/multimark/) provides Python bindings to [cmark-gfm](https://github.com/github/cmark-gfm), the C reference implementation of [CommonMark](https://commonmark.org/) with GitHub's Flavored Markdown extensions. CommonMark exists because Markdown spent most of its life without a single specification: implementations disagreed at the edges, and the same document could render differently depending on which library processed it. cmark-gfm is the implementation the specification is defined against, so binding to it inherits the most authoritative behavior available rather than an approximation of it.
+
+The interface is a set of functions, one per output format. The common case is rendering to HTML, but the same input can also be rendered to other targets, which is what sets multimark apart from most of its peers:
+
+```python
+from multimark import markdown_to_html, markdown_to_latex
+
+markdown_to_html("**Hello**, *world*!")
+# '<p><strong>Hello</strong>, <em>world</em>!</p>\n'
+
+markdown_to_latex("**Hello**, *world*!")
+# '\\textbf{Hello}, \\emph{world}!\n'
+```
+
+Beyond HTML and LaTeX, the library renders to groff man pages, to normalized CommonMark (useful for reformatting a document into a canonical form), and to an XML representation of the parsed syntax tree. Most Python Markdown libraries render to HTML and nothing else, so having this range of output formats is a step up. We made sure that the API has consistency and, to that end, each renderer accepts the same keyword arguments for common adjustments. So enabling smart punctuation, allowing raw HTML to pass through or turning on footnote syntax is just a matter of a named boolean rather than a numeric flag. Here are some examples of that:
+
+```python
+from multimark import markdown_to_html
+
+markdown_to_html('"Hello" -- world...', smart=True)
+# '<p>“Hello” – world…</p>\n'
+
+markdown_to_html('<div>hi</div>', unsafe=True)
+# '<div>hi</div>\n'
+```
+
+In terms of the defaults we made sure that raw HTML embedded in Markdown is suppressed unless you opt in with `unsafe=True`. This make the safe behavior be the default, which is good for a library that will often process untrusted input. GitHub Flavored Markdown extensions (tables, strikethrough, autolinking, task lists, and the tag filter) are enabled by name through the `extensions=` argument, so the extended syntax is opt-in rather than always present.
+
+```python
+from multimark import markdown_to_html
+
+markdown_to_html('| A | B |\n|---|---|\n| 1 | 2 |\n', extensions=["table"])
+markdown_to_html('~~deleted~~', extensions=["strikethrough"])
+```
+
+There are a few other Python libraries that cover similar ground. [Python-Markdown](https://python-markdown.github.io) is the long-standing default, a pure-Python library with a rich extension ecosystem but a syntax that predates CommonMark and does not aim for strict compliance. [markdown-it-py](https://markdown-it-py.readthedocs.io) is a more modern pure-Python option. It is CommonMark-compliant and pluggable, and it underpins tools like MyST and Rich. This one is a good choice when you want a pure-Python dependency and a plugin system. [mistune](https://mistune.lepture.com) emphasizes speed within the pure-Python category. multimark differs from all three in that it is not pure Python: it calls into the C reference implementation. That makes it both authoritative and, according to the package's own [benchmarks](https://posit-dev.github.io/multimark/user-guide/performance.html), the fastest Markdown-to-HTML option in Python.
+
+The closest comparison is [cmarkgfm](https://github.com/theacodes/cmarkgfm), which binds the same C library and is a really solid package. multimark differs in three ways as it:
+
+1. exposes all five of cmark-gfm's output formats rather than HTML alone
+2. presents a keyword-argument interface in place of a numeric bitmask (while still allowing the bitmask through an `Options` flag)
+3. is speedier (its benchmarks report a modest speed advantage from reduced Python-side overhead)
+
+The older pure-Python [commonmark.py](https://github.com/readthedocs/commonmark.py) has been unmaintained since 2019 and is much slower, so it is hard to recommend for new work. Pandoc, reached through `pypandoc`, converts between far more formats than multimark, but it requires the Pandoc binary, a much larger commitment than a wheel with no system dependencies. For the job of rendering CommonMark and GFM to one of a handful of formats, multimark gives you native-engine correctness and speed, several output targets, and a simple install. The LaTeX renderer is the reason the library exists, and it is what Great Tables uses to convert Markdown in LaTeX table outputs.
+
+## nokap: screenshots and PDFs without the browser-automation baggage
+
+[nokap](https://posit-dev.github.io/nokap/) captures screenshots and PDFs from web pages or local HTML using headless Chrome. The capability is out there but what distinguishes nokap is how it is delivered. It talks to Chrome directly over the [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/) through a WebSocket. This translates into a single Python dependency (`websockets`) and there's no need for browser driver binaries, bundled Chromium download, or automation framework. It expects Chrome or Chromium to be installed, finds it, launches it headless on a random debugging port, and drives it through the protocol.
+
+The primary function takes a URL (or a local file) and an output path, and infers the format from the extension:
+
+```python
+import nokap
+
+nokap.webshot("https://example.com", "example.png")
+nokap.webshot("https://example.com", "example.pdf")
+nokap.webshot("https://example.com", "header.png", selector="h1")
+```
+
+A second function, `from_html()`, renders an HTML string directly. This is the entry point for table and report libraries that have already produced HTML and want a static image of it:
+
+```python
+import nokap
+
+nokap.from_html("<h1>Hello, world!</h1>", "hello.png")
+```
+
+The capture is configurable. You can target a specific element with a CSS selector, set the viewport dimensions for responsive layouts, add padding around a captured element, clip to a rectangle, and produce high-quality output by setting a zoom factor. PDF generation supports page size, margins, and orientation. The launched Chrome process stays alive between captures so repeated calls reuse it, and it shuts down automatically when the program exits (with a `close()` function for explicit cleanup).
+
+The alternatives mostly sit at the heavy end. [Selenium](https://www.selenium.dev) and [Playwright](https://playwright.dev/python/) are full browser-automation frameworks built for driving complex interactions across multiple browsers. They are powerful and well-suited to end-to-end testing, but using one only to capture a screenshot means a large dependency, and Playwright downloads its own browser bundles, which can run to hundreds of megabytes. [pyppeteer](https://github.com/pyppeteer/pyppeteer), a port of Puppeteer, also downloads a Chromium build and has seen uneven maintenance. [shot-scraper](https://shot-scraper.datasette.io) is a polished tool for this exact task, but it is built on Playwright and inherits that foundation. At the lighter end, [html2image](https://github.com/vgalin/html2image) drives Chrome through command-line flags rather than the DevTools Protocol, which is simpler but gives up the finer control the protocol provides, and the older `imgkit` route depends on `wkhtmltoimage`, whose rendering engine is a dated fork of WebKit.
+
+nokap is far lighter than the automation frameworks, since it neither downloads a browser nor installs a driver and adds only one Python dependency. Yet it speaks the full DevTools Protocol rather than passing command-line flags, so it keeps real control over the viewport, clipping, scaling, and PDF parameters. For turning a page or a fragment of HTML into a high-quality image or PDF, that combination of small footprint and real control is hard to find elsewhere. It is the component that Great Tables uses when its `gtsave()` method writes a table to a PNG or a PDF, and the `from_html()` entry point exists so a library that has already produced HTML can hand it straight to nokap.
+
+## A shared approach
+
+multimark, nokap, and py-yaml12 share a deliberately narrow conception of what a library should be. Each does a single job that many programs need, and works off of a mature engine rather than reimplementing one. multimark renders CommonMark and GFM and leaves broader document conversion to Pandoc. nokap captures pages and renders HTML and leaves end-to-end testing to Playwright. py-yaml12 reads and writes YAML 1.2 and leaves configuration frameworks to others.
+
+The same priorities run through all three libraries:
+
+1. correctness, by binding to reference implementations rather than approximating them
+2. speed, by pushing the work into compiled code
+3. safety, through defaults such as multimark's suppression of raw HTML
+4. lightness, through wheels that ask little or nothing of the host system
+
+These are the properties that matter most in code you depend on without thinking about it.
+
+## Getting started
+
+Both multimark and nokap are on PyPI. multimark installs with `pip install multimark` and ships wheels for Linux, macOS, and Windows on Python 3.9 and above, with no system dependencies. nokap installs with `pip install nokap` on Python 3.10 and above and expects a Chrome or Chromium installation, which it locates on its own. The [multimark documentation](https://posit-dev.github.io/multimark/) and the [nokap documentation](https://posit-dev.github.io/nokap/) sites cover all of the interface details and options.
