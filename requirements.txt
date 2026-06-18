@@ -1,0 +1,14 @@
+# Python dependencies for executing the blog posts' {python} cells.
+# Installed into .venv and exposed to Quarto via the `posts-blog` Jupyter kernel.
+# See the Makefile (`make setup`).
+
+great-tables>=0.22.0
+multimark
+nokap
+polars
+pandas
+pyarrow
+
+# Quarto's execution engine
+ipykernel
+jupyter
