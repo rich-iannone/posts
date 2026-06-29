@@ -142,6 +142,33 @@ store = PostgreSQLStore.create(
 
 The store supports full-text search via PostgreSQL's native `tsvector`/`tsquery` with a pre-computed column and GIN index, vector similarity search via pgvector with HNSW indexes (supporting cosine, L2, and inner product distance metrics), and combined retrieval that merges both result sets with deoverlap support.
 
+Retrieval uses the same interface as every other backend: a single `retrieve()` call returns a ranked list of chunks, each carrying its similarity score under `metrics` and its heading-hierarchy `context`. Running a query against a store populated with the raghilda documentation returns the most relevant chunks first:
+
+```python
+results = store.retrieve("How are vector indexes configured?", top_k=2)
+
+for r in results:
+    print(f"Score: {r.metrics[0].value:.4f}")
+    print(r.context)
+    print(r.text)
+    print("---")
+```
+
+```
+Score: 0.5142
+# PostgreSQL store
+Vector similarity search runs through pgvector with HNSW indexes,
+supporting cosine, L2, and inner product distance metrics. Call
+build_index() after ingestion to create them.
+---
+Score: 0.4417
+# PostgreSQL store > Combined retrieval
+Combined retrieval merges the vector and full-text result sets and
+applies deoverlap to drop redundant overlapping chunks, returning a
+single ranked list from one retrieve() call.
+---
+```
+
 Attributes work as expected: scalar types map to columns, struct types map to JSONB, and attribute filters can query into JSONB fields using the `->>` operator. The `build_index()` method creates HNSW indexes after ingestion, and the `vss_index=` parameter on `create()` controls the default index type.
 
 Connection strings are accepted directly in `create()` and `connect()`, so you can point the store at any PostgreSQL instance with pgvector installed. If the pgvector extension is missing, the store raises an informative error rather than failing cryptically on the first vector operation.
