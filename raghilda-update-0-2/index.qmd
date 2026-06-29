@@ -103,6 +103,20 @@ scope = CrawlScope(
 documents = crawler.markdown_documents(scope)
 ```
 
+Iterating the result performs the crawl lazily, yielding one `MarkdownDocument` per page. Each document exposes the page's `origin` alongside its rendered Markdown `content`, so a quick pass confirms that the JavaScript-rendered pages came back with real text rather than the empty shells a plain HTTP fetch would have produced:
+
+```python
+for doc in documents:
+    print(doc.origin, f"({len(doc.content):,} chars)")
+```
+
+```
+https://my-spa-docs.example.com/ (3,214 chars)
+https://my-spa-docs.example.com/guide/install (5,902 chars)
+https://my-spa-docs.example.com/guide/config (8,477 chars)
+https://my-spa-docs.example.com/api/reference (12,043 chars)
+```
+
 The `render=True` default tells Cloudflare to execute JavaScript before extracting content. For server-rendered sites where JavaScript execution is unnecessary, setting `render=False` reduces crawl time and API usage. The `source=` parameter controls how pages are discovered: `"all"` (the default) combines multiple discovery methods, `"sitemap"` reads from the site's `sitemap.xml`, `"crawl"` follows links from the rendered DOM, and `"urls"` processes only the explicitly provided roots.
 
 For stores that need regular updates, the `modified_since=` parameter restricts the crawl to pages modified after a given Unix timestamp, keeping refresh jobs lightweight. Combined with the crawl cache and the store's own deduplication (identical documents are not re-embedded), an incremental update script can run daily without redundant work:
