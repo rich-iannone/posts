@@ -1,5 +1,5 @@
 ---
-title: "Small, Sharp Tools: multimark and nokap"
+title: "Small, Focused Tools: multimark and nokap"
 description: >
   Two new infrastructural Python libraries from Posit, multimark and nokap,
   follow in the footsteps of py-yaml12: take a job the whole ecosystem needs
@@ -8,7 +8,7 @@ description: >
 people:
   - Rich Iannone
 date: '2026-06-19'
-image: assets/small-sharp-tools.png
+image: assets/small-focused-tools.png
 image-alt: The multimark and nokap logos side by side
 software:
   - multimark
@@ -21,6 +21,7 @@ tags:
   - multimark
   - nokap
   - Python Packages
+jupyter: posts-blog
 ---
 
 Posit has released two small Python libraries: [multimark](https://posit-dev.github.io/multimark/), which renders Markdown, and [nokap](https://posit-dev.github.io/nokap/), which captures web pages as images and PDFs. Both are infrastructure-type packages and are meant to sit near the bottom of a stack (loaded by things above it).
@@ -41,35 +42,29 @@ The pattern in each case is the same: a small library that wraps a proven native
 
 The interface is a set of functions, one per output format. The common case is rendering to HTML, but the same input can also be rendered to other targets, which is what sets multimark apart from most of its peers:
 
-```python
+```{python}
 from multimark import markdown_to_html, markdown_to_latex
 
-markdown_to_html("**Hello**, *world*!")
-# '<p><strong>Hello</strong>, <em>world</em>!</p>\n'
-
-markdown_to_latex("**Hello**, *world*!")
-# '\\textbf{Hello}, \\emph{world}!\n'
+print(markdown_to_html("**Hello**, *world*!"))
+print(markdown_to_latex("**Hello**, *world*!"))
 ```
 
 Beyond HTML and LaTeX, the library renders to groff man pages, to normalized CommonMark (useful for reformatting a document into a canonical form), and to an XML representation of the parsed syntax tree. Most Python Markdown libraries render to HTML and nothing else, so having this range of output formats is a step up. We made sure that the API has consistency and, to that end, each renderer accepts the same keyword arguments for common adjustments. So enabling smart punctuation, allowing raw HTML to pass through or turning on footnote syntax is just a matter of a named boolean rather than a numeric flag. Here are some examples of that:
 
-```python
+```{python}
 from multimark import markdown_to_html
 
-markdown_to_html('"Hello" -- world...', smart=True)
-# '<p>“Hello” – world…</p>\n'
-
-markdown_to_html('<div>hi</div>', unsafe=True)
-# '<div>hi</div>\n'
+print(markdown_to_html('"Hello" -- world...', smart=True))
+print(markdown_to_html('<div>hi</div>', unsafe=True))
 ```
 
 In terms of the defaults we made sure that raw HTML embedded in Markdown is suppressed unless you opt in with `unsafe=True`. This make the safe behavior be the default, which is good for a library that will often process untrusted input. GitHub Flavored Markdown extensions (tables, strikethrough, autolinking, task lists, and the tag filter) are enabled by name through the `extensions=` argument, so the extended syntax is opt-in rather than always present.
 
-```python
+```{python}
 from multimark import markdown_to_html
 
-markdown_to_html('| A | B |\n|---|---|\n| 1 | 2 |\n', extensions=["table"])
-markdown_to_html('~~deleted~~', extensions=["strikethrough"])
+print(markdown_to_html('| A | B |\n|---|---|\n| 1 | 2 |\n', extensions=["table"]))
+print(markdown_to_html('~~deleted~~', extensions=["strikethrough"]))
 ```
 
 There are a few other Python libraries that cover similar ground. [Python-Markdown](https://python-markdown.github.io) is the long-standing default, a pure-Python library with a rich extension ecosystem but a syntax that predates CommonMark and does not aim for strict compliance. [markdown-it-py](https://markdown-it-py.readthedocs.io) is a more modern pure-Python option. It is CommonMark-compliant and pluggable, and it underpins tools like MyST and Rich. This one is a good choice when you want a pure-Python dependency and a plugin system. [mistune](https://mistune.lepture.com) emphasizes speed within the pure-Python category. multimark differs from all three in that it is not pure Python: it calls into the C reference implementation. That makes it both authoritative and, according to the package's own [benchmarks](https://posit-dev.github.io/multimark/user-guide/performance.html), the fastest Markdown-to-HTML option in Python.
