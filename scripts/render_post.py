@@ -2,7 +2,7 @@
 """Render a Quarto blog post (.qmd) to the .md that Hugo consumes.
 
 Usage:
-    python scripts/render_post.py <post-dir>        # e.g. small-sharp-tools
+    python scripts/render_post.py <post-dir>        # e.g. small-focused-tools
     python scripts/render_post.py <post-dir>/index.qmd
 
 Steps:
@@ -58,8 +58,19 @@ def drop_jupyter_key(frontmatter: list[str]) -> list[str]:
 
 
 def clean_body(body: str) -> str:
-    """Turn Quarto's executed-cell markup into plain Markdown."""
+    """Turn Quarto's executed-cell markup into plain Markdown.
+
+    Also collapses blank lines that fall inside a raw-HTML ``<div>`` block.
+    Great Tables emits a blank line inside the table's ``<style>`` element;
+    left in place, Hugo's Goldmark parser treats that blank line as the end of
+    the HTML block and then tries to parse the following CSS rule (``... { ...
+    }``) as Markdown block attributes, which fails the site build. Dropping
+    blank lines while a ``<div>`` is open keeps the whole table as one HTML
+    block. The removed lines are only blank space between CSS rules, so the
+    rendered table is unaffected.
+    """
     out = []
+    div_depth = 0
     for line in body.splitlines():
         # Attributed code fence from an executed cell: ``` {.python .cell-code}
         m = re.match(r"^``` \{\.([A-Za-z0-9_-]+)[^}]*\}$", line)
@@ -74,11 +85,37 @@ def clean_body(body: str) -> str:
         if m:
             out.append(f"```{m.group(1)}")
             continue
+        # Drop blank lines inside an open raw-HTML <div> block (see docstring).
+        if div_depth > 0 and line.strip() == "":
+            continue
+        div_depth += len(re.findall(r"<div\b", line)) - len(re.findall(r"</div\s*>", line))
+        if div_depth < 0:
+            div_depth = 0
         out.append(line)
     text = "\n".join(out)
     if not text.endswith("\n"):
         text += "\n"
     return text
+
+
+_IMAGE_RE = re.compile(r"!\[(?P<alt>.*?)\]\((?P<src>(?!https?:)[^)]+)\)", re.S)
+
+
+def center_images(text: str) -> str:
+    """Wrap local-asset images in a centered HTML block.
+
+    Hugo renders these images left-aligned by default. We emit a centered
+    ``<p><img></p>`` instead. This runs after Pandoc (not in the .qmd) because
+    Pandoc mangles raw ``<img>`` tags whose alt text contains backticks; doing
+    it here keeps the .qmd as clean Markdown and hands Goldmark plain HTML.
+    Remote (http) images, e.g. badges, are left untouched.
+    """
+
+    def repl(m: "re.Match[str]") -> str:
+        alt = " ".join(m.group("alt").split()).replace("`", "").replace('"', "&quot;")
+        return f'<p style="text-align: center;"><img src="{m.group("src")}" alt="{alt}"></p>'
+
+    return _IMAGE_RE.sub(repl, text)
 
 
 def main(argv: list[str]) -> int:
@@ -102,8 +139,8 @@ def main(argv: list[str]) -> int:
     qmd_frontmatter = drop_jupyter_key(qmd_frontmatter)
     _, md_body = split_frontmatter(md.read_text())
 
-    # Step 3: normalize cell markup and reassemble
-    final = "\n".join(qmd_frontmatter) + "\n" + clean_body(md_body)
+    # Step 3: normalize cell markup, center local images, and reassemble
+    final = "\n".join(qmd_frontmatter) + "\n" + center_images(clean_body(md_body))
     md.write_text(final)
 
     print(f"Done: {md}")
