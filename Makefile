@@ -6,7 +6,7 @@
 #
 # Common usage:
 #   make setup                 create .venv, install deps, register the kernel
-#   make small-sharp-tools     render a single post (by directory name)
+#   make small-focused-tools     render a single post (by directory name)
 #   make all                   re-render posts that ALREADY have an index.md
 #   make list                  show each post and whether its .md is current
 #   make clean                 remove Quarto caches (keeps the .md files)
