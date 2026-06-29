@@ -1,0 +1,250 @@
+---
+title: "Pointblank `v0.25.0`: schema inference, multi-modal validation, and pipeline contracts"
+description: >
+  Pointblank v0.25.0 adds rich schema inference for realistic synthetic data,
+  multi-modal attachments for LLM-based validation with prompt(), and a
+  Contract/Pipeline system for enforcing data quality at the boundaries of a
+  transformation.
+people:
+  - Rich Iannone
+date: '2026-06-18'
+image: assets/pointblank-0-25.png
+image-alt: The Pointblank logo with the version number 0.25.0
+software:
+  - pointblank
+languages:
+  - Python
+topics:
+  - Best Practices
+tags:
+  - Pointblank
+  - Data Validation
+  - Python Packages
+---
+
+[Pointblank](https://posit-dev.github.io/pointblank/) is a data
+validation library for Python. You simply point it at a table, declare
+the expectations that the data should meet (e.g., no nulls in the key
+column, values within a sensible range, rows that are distinct, a schema
+that matches, etc.), and it interrogates the data and reports what
+passed and what did not. Over the last several releases the library has
+added two capabilities that sit alongside that core: synthetic data
+generation, which builds realistic test data from a schema, and
+LLM-based validation through `prompt()`, which lets you express checks
+in plain language when a rule is too fuzzy to encode as a conventional
+step.
+
+We did even more in the latest release of the package (`v0.25.0`).
+Schema inference can now read an existing table and work out its
+constraints automatically, which makes generating realistic synthetic
+data far less tedious. The `prompt()` method accepts image and PDF
+attachments, so the model can judge data against a reference document
+rather than against the prompt text alone. And a new pair of classes,
+`Contract` and `Pipeline`, lets you enforce data quality at both ends of
+a transformation rather than at a single point. This post walks through
+each of these big additions, with working examples throughout.
+
+## Inferring a schema from an existing table
+
+Synthetic data generation in Pointblank starts from a `Schema`: a
+description of the columns, their types, and their constraints. Writing
+that schema by hand is fine for a few columns, but it becomes laborious
+for a wide table, and it requires you to already know the ranges, the
+allowed categories, and which columns happen to look like email
+addresses or phone numbers. The new `schema_from_tbl()` function removes
+that burden by inspecting a real table and inferring the schema for you.
+
+The function reads any supported table (a Polars or Pandas DataFrame, or
+an Ibis table backed by DuckDB, SQLite, and the like) and works out the
+constraints from the data itself. It detects numeric minimums and
+maximums, uniqueness, null rates, and the set of allowed values for
+columns that behave categorically. It also attempts to match string
+columns to known generation presets, of which there are more than two
+dozen, based on the column name and the shape of the values, so a column
+named `email` is recognized as holding email addresses rather than
+arbitrary text.
+
+```python
+import pointblank as pb
+import polars as pl
+
+df = pl.DataFrame({
+    "user_id": list(range(1, 51)),
+    "email": [f"user{i}@example.com" for i in range(50)],
+    "age": [20 + i % 50 for i in range(50)],
+    "status": ["active", "pending", "inactive"] * 16 + ["active", "pending"],
+})
+
+schema = pb.schema_from_tbl(df)
+
+pb.preview(schema.generate(n=10, seed=23))
+```
+
+The result is a `Schema` object that you can feed straight into
+generation, as above, where `schema.generate()` produces ten rows that
+mirror the characteristics of the original. The inference is tunable:
+`categorical_threshold=` controls how many distinct values a column may
+have before it is treated as categorical rather than free-form,
+`detect_presets=False` turns off the preset matching when you would
+rather not have it guess, and `sample_size=` limits the inspection to a
+sample of rows when the source table is large. The same behavior is
+available as a class method, `Schema.from_table()`, for those who prefer
+to start from the `Schema` type. Either way, the path from an existing
+table to a realistic synthetic stand-in is now a single call.
+
+## Visual context for LLM validation with `prompt()`
+
+The `prompt()` method validates a table by sending its rows to a
+language model along with a natural-language description of what good
+data looks like. This is the right tool when a rule resists tidy
+expression: judging whether a product description is on-brand, or
+whether a free-text field is coherent, is hard to write as a
+conventional check but easy to state in a sentence. Until now, the only
+context the model had was the prompt text and the data. With `v0.25.0`,
+`prompt()` accepts an `attachments=` parameter, so you can supply
+reference images and PDFs that travel with every batch of rows.
+
+The attachments can be local file paths or URLs, and the supported
+formats include the common image types (`.png`, `.jpg`, `.jpeg`, `.gif`,
+`.webp`) along with `.pdf`. This opens up validations that depend on a
+reference the model needs to see: checking that entries conform to a
+brand style guide supplied as a PDF, that values are consistent with a
+schema diagram, or that descriptions match a set of reference
+photographs. The document becomes the rulebook, and the model evaluates
+each row against it.
+
+```python
+import pointblank as pb
+import polars as pl
+
+products = pl.DataFrame({
+    "product_name": [
+        "Aurora Wireless Headphones",
+        "cheap knockoff buds!!!",
+        "Aurora Smart Speaker",
+    ],
+    "tagline": [
+        "Sound, perfected.",
+        "BUY NOW LIMITED TIME OFFER",
+        "Fill the room.",
+    ],
+})
+
+validation = (
+    pb.Validate(data=products)
+    .prompt(
+        prompt=(
+            "Each product name and tagline must follow the voice, "
+            "capitalization, and naming conventions described in the "
+            "attached brand guide."
+        ),
+        model="anthropic:claude-opus-4-6",
+        attachments=["brand_guide.pdf"],
+        columns_subset=["product_name", "tagline"],
+    )
+    .interrogate()
+)
+```
+
+The attachments are sent as global context for every batch, so a single
+reference document informs the judgment of all the rows. The other
+arguments behave as they did before: `model=` names the provider and
+model (Anthropic, OpenAI, Ollama, Bedrock, and Azure OpenAI are
+supported), `columns_subset=` restricts which columns the model sees,
+and `batch_size=` and `max_concurrent=` govern how rows are grouped into
+requests and how many requests run at once. The results go into the
+usual validation report alongside any conventional steps, so an
+LLM-based check can sit next to a null check in the same interrogation.
+
+## Contracts and pipelines for boundary enforcement
+
+Most data quality problems happen at boundaries. Data arrives from an
+upstream source that may have changed without warning, you transform it,
+and the result feeds something downstream that has its own expectations.
+Validating only after the transform tells you that something went wrong,
+but not whether the fault lay in the incoming data or in your own code.
+The new `Contract` and `Pipeline` classes address this by letting you
+validate at both ends of a transformation, so a failure points clearly
+at its origin.
+
+A `Contract` is a declarative description of what data must look like at
+a particular point. It combines a `Schema` for structural expectations
+with a list of validation steps for semantic rules, and it carries
+metadata: a name, a version, an owner, the downstream consumers, and a
+`direction` that marks it as guarding a source or a target. That
+metadata matters in practice, because a contract is as much a governance
+artifact as a technical one since it records who is responsible for the
+data and who depends on it.
+
+```python
+import pointblank as pb
+
+source_contract = pb.Contract(
+    name="raw_sales_feed",
+    direction="source",
+    schema=pb.Schema(
+        order_id="String",
+        amount_cents="Int64",
+        currency="String",
+    ),
+    steps=[
+        pb.Step("col_vals_not_null", columns=["order_id", "amount_cents"]),
+        pb.Step("rows_distinct", columns=["order_id"]),
+    ],
+    version="1.0.0",
+    owner="data-platform-team",
+)
+```
+
+A `Pipeline` ties two contracts together around a transformation. You
+give it a source contract and a target contract, and its `run()` method
+validates the incoming data against the source, applies your transform
+function, and validates the output against the target, returning a
+result that holds both validations and the transformed table. The
+default `short_circuit=True` behavior skips the transform and the target
+validation when the source validation fails critically, on the reasoning
+that there is no point transforming data you already know is broken;
+setting it to `False` runs both boundaries regardless, which is useful
+when you want a full picture of every failure at once.
+
+```python
+import pointblank as pb
+
+source = pb.Contract(
+    name="raw_data",
+    direction="source",
+    steps=[pb.Step("col_vals_not_null", columns=["id"])],
+)
+
+target = pb.Contract(
+    name="clean_data",
+    direction="target",
+    steps=[pb.Step("col_vals_not_null", columns=pb.everything())],
+)
+
+pipeline = pb.Pipeline(source=source, target=target, short_circuit=True)
+
+def clean_data(df):
+    return df.dropna()
+
+result = pipeline.run(data=raw_data, transform=clean_data)
+```
+
+The value of this arrangement is that it draws a clear line of
+accountability through a transformation. The source contract says what
+you require of your inputs, the target contract says what you promise to
+your consumers, and the pipeline enforces both while keeping the
+transform itself an ordinary function. When something breaks, the report
+tells you which boundary it broke at, which is usually the first thing
+you want to know.
+
+## Getting started
+
+Pointblank `v0.25.0` is available now on PyPI, so
+`pip install pointblank` (or an upgrade of an existing install) brings
+everything described here. The [documentation
+site](https://posit-dev.github.io/pointblank/) covers each feature in
+depth with runnable examples, and the [GitHub
+repository](https://github.com/posit-dev/pointblank) holds the source,
+the full changelog, and the issue tracker. If you have a feature to
+request or a problem to report, the issue tracker is the place to start.
